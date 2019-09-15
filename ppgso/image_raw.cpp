@@ -3,22 +3,20 @@
 
 #include "image.h"
 
-using namespace std;
-
 namespace ppgso {
   namespace image {
 
-    Image loadRAW(const string &raw, int width, int height) {
+    Image loadRAW(const std::string &raw, int width, int height) {
       Image image{width, height};
       auto &framebuffer = image.getFramebuffer();
 
       // Open file stream
-      ifstream image_stream(raw, ios::binary);
+      std::ifstream image_stream(raw, std::ios::binary);
 
       if (!image_stream.is_open()) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "Could not open image " << raw;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       // Load the data
@@ -27,13 +25,13 @@ namespace ppgso {
       return image;
     }
 
-    void saveRAW(Image &image, const string &raw) {
-      ofstream image_stream(raw, ios::binary);
+    void saveRAW(Image &image, const std::string &raw) {
+      std::ofstream image_stream(raw, std::ios::binary);
 
       if (!image_stream.is_open()) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "Could not open image " << raw;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       auto &framebuffer = image.getFramebuffer();

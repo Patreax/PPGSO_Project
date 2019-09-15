@@ -18,20 +18,16 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 // Object to represent Bezier patch
 class BezierPatch {
 private:
   // 3D vectors define points/vertices of the shape
-  vector<vec3> vertices;
+  std::vector<glm::vec3> vertices;
 
   // Texture coordinates
-  vector<vec2> texCoords;
+  std::vector<glm::vec2> texCoords;
 
   // Define our face using indexes to 3 vertices
   struct face {
@@ -39,27 +35,27 @@ private:
   };
 
   // Define our mesh as collection of faces
-  vector<face> mesh;
+  std::vector<face> mesh;
 
   // These will hold the data and object buffers
   GLuint vao, vbo, tbo, ibo;
-  mat4 modelMatrix;
+  glm::mat4 modelMatrix{1.0f};
 
-  vec3 bezierPoint(const vec3 controlPoints[4], float t) {
+  glm::vec3 bezierPoint(const glm::vec3 controlPoints[4], float t) {
     // TODO: Compute 3D point on bezier curve
     return {};
   }
 
-  Shader program{texture_vert_glsl, texture_frag_glsl};
-  Texture texture{image::loadBMP("lena.bmp")};
+  ppgso::Shader program{texture_vert_glsl, texture_frag_glsl};
+  ppgso::Texture texture{ppgso::image::loadBMP("lena.bmp")};
 public:
   // Public attributes that define position, color ..
-  vec3 position{0,0,0};
-  vec3 rotation{0,0,0};
-  vec3 scale{1,1,1};
+  glm::vec3 position{0,0,0};
+  glm::vec3 rotation{0,0,0};
+  glm::vec3 scale{1,1,1};
 
   // Initialize object data buffers
-  BezierPatch(const vec3 controlPoints[4][4]) {
+  BezierPatch(const glm::vec3 controlPoints[4][4]) {
     // Generate Bezier patch points and incidences
     unsigned int PATCH_SIZE = 10;
     for(unsigned int i = 0; i < PATCH_SIZE ; i++) {
@@ -93,7 +89,7 @@ public:
     // Copy positions to gpu
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
     // Set vertex program inputs
     auto position_attrib = program.getAttribLocation("Position");
@@ -103,7 +99,7 @@ public:
     // Copy texture positions to gpu
     glGenBuffers(1, &tbo);
     glBindBuffer(GL_ARRAY_BUFFER, tbo);
-    glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(vec2), texCoords.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(glm::vec2), texCoords.data(), GL_STATIC_DRAW);
 
     // Set vertex program inputs
     auto texCoord_attrib = program.getAttribLocation("TexCoord");
@@ -138,12 +134,12 @@ public:
     // Initialize projection
     // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
     // You can think of this as the camera objective settings
-    auto projection = perspective( (PI/180.f) * 60.0f, 1.0f, 0.1f, 10.0f);
+    auto projection = glm::perspective( (ppgso::PI/180.f) * 60.0f, 1.0f, 0.1f, 10.0f);
     program.setUniform("ProjectionMatrix", projection);
 
     // Create view matrix (translate camera a bit backwards, so we can see the geometry)
     // This can be seen as the camera position/rotation in space
-    auto view = translate(mat4{}, {0.0f, 0.0f, -3.0f});
+    auto view = glm::translate(glm::mat4{}, {0.0f, 0.0f, -3.0f});
     program.setUniform("ViewMatrix", view);
 
     // Set model position
@@ -158,10 +154,10 @@ public:
   };
 };
 
-class BezierSurfaceWindow : public Window {
+class BezierSurfaceWindow : public ppgso::Window {
 private:
   // Define 16 control points
-  vec3 controlPoints[4][4]{
+  glm::vec3 controlPoints[4][4]{
       { {-1,1,0}, {-0.5,1,0}, {.5,1,0}, {1,1,3}, },
       { {-1,.5,0}, {-0.5,.5,0}, {.5,.5,0}, {1,.5,0}, },
       { {-1,-.5,0}, {-0.5,-.5,0}, {.5,-.5,0}, {1,-.5,-1}, },

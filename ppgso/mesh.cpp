@@ -3,20 +3,16 @@
 
 #include "mesh.h"
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
-Mesh::Mesh(const string &obj_file) {
+ppgso::Mesh::Mesh(const std::string &obj_file) {
   // Load OBJ file
   shapes.clear();
   materials.clear();
-  string err = tinyobj::LoadObj(shapes, materials, obj_file.c_str());
+  std::string err = tinyobj::LoadObj(shapes, materials, obj_file.c_str());
 
   if (!err.empty()) {
-    stringstream msg;
-    msg << err << endl << "Failed to load OBJ file " << obj_file << "!" << endl;
-    throw runtime_error(msg.str());
+    std::stringstream msg;
+    msg << err << std::endl << "Failed to load OBJ file " << obj_file << "!" << std::endl;
+    throw std::runtime_error(msg.str());
   }
 
   // Initialize OpenGL Buffers
@@ -72,7 +68,7 @@ Mesh::Mesh(const string &obj_file) {
   }
 }
 
-Mesh::~Mesh() {
+ppgso::Mesh::~Mesh() {
   for(auto& buffer : buffers) {
     glDeleteBuffers(1, &buffer.ibo);
     glDeleteBuffers(1, &buffer.nbo);
@@ -82,7 +78,7 @@ Mesh::~Mesh() {
   }
 }
 
-void Mesh::render() {
+void ppgso::Mesh::render() {
   for(auto& buffer : buffers) {
     // Draw object
     glBindVertexArray(buffer.vao);
