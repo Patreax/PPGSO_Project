@@ -36,7 +36,7 @@ endif ()
 # Warnings for Debug mode
 option(USE_STRICT_COMPILE_WARNINGS "Use strict compilation warnings in debug mode." ON)
 # These compile flags should apply for GCC and Clang compilers
-set(STRICT_COMPILE_FLAGS "-Wpedantic -Wall -Wno-c++98-compat -Wextra -Wno-sign-conversion -Wno-unused-parameter")
+set(STRICT_COMPILE_FLAGS "-Wpedantic -Wall -Wno-c++98-compat -Wextra -Wconversion -Wsign-compare -Wuninitialized -Wno-unused-parameter")
 if (USE_STRICT_COMPILE_WARNINGS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${STRICT_COMPILE_FLAGS}")
 endif ()
@@ -86,7 +86,7 @@ add_library(ppgso STATIC
 target_compile_definitions(ppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC)
 
 # Link to GLFW, GLEW and OpenGL
-target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(ppgso PUBLIC ${GLFW_LIBRARIES} GLEW::GLEW ${OPENGL_LIBRARIES})
 # Pass on include directories
 target_include_directories(ppgso PUBLIC
         ppgso
@@ -113,7 +113,7 @@ install(TARGETS raw2_raycast DESTINATION .)
 
 # raw3_raytrace
 add_executable(raw3_raytrace src/raw3_raytrace/raw3_raytrace.cpp)
-target_link_libraries(raw3_raytrace ppgso)
+target_link_libraries(raw3_raytrace ppgso ${OpenMP_libomp_LIBRARY})
 install(TARGETS raw3_raytrace DESTINATION .)
 
 # raw4_raster
@@ -133,7 +133,7 @@ install(TARGETS gl2_texture DESTINATION .)
 
 # gl3_animate
 add_executable(gl3_animate src/gl3_animate/gl3_animate.cpp)
-target_link_libraries(gl3_animate ppgso shaders)
+target_link_libraries(gl3_animate ppgso shaders ${OpenMP_libomp_LIBRARY})
 install(TARGETS gl3_animate DESTINATION .)
 
 # gl4_transform
