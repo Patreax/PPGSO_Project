@@ -13,20 +13,16 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window to display textured OpenGL quad
  */
-class TextureWindow : public Window {
+class TextureWindow : public ppgso::Window {
 private:
   // OpenGL program and Mesh to use
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
-  Mesh quad = {"quad.obj"};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Mesh quad = {"quad.obj"};
   GLuint texture_id = 0;
 
   /*!
@@ -35,7 +31,7 @@ private:
    * @param width Width of the image to load
    * @param height Height of the image to load
    */
-  void loadImage(const string &image_file, unsigned int width, unsigned int height) {
+  void loadImage(const std::string &image_file, unsigned int width, unsigned int height) {
     // Create new OpenGL texture object identifier
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -45,10 +41,10 @@ private:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     // Read raw data
-    ifstream image_stream(image_file, ios::binary);
+    std::ifstream image_stream(image_file, std::ios::binary);
 
     // Setup buffer for pixels (r,g,b bytes), since we will not manipulate the image just keep it as char
-    vector<char> buffer(width * height * 3);
+    std::vector<char> buffer(width * height * 3);
     image_stream.read(buffer.data(), buffer.size());
     image_stream.close();
 
@@ -77,9 +73,9 @@ public:
     glBindTexture(GL_TEXTURE_2D, texture_id);
 
     // Set Matrices to identity so there are no projections/transformations applied in the vertex shader
-    program.setUniform("ModelMatrix", mat4{1.0f});
-    program.setUniform("ViewMatrix", mat4{1.0f});
-    program.setUniform("ProjectionMatrix", mat4{1.0f});
+    program.setUniform("ModelMatrix", glm::mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
   }
 
   /*!

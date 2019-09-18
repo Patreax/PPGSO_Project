@@ -5,25 +5,21 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 // static resources
-unique_ptr<Mesh> Explosion::mesh;
-unique_ptr<Texture> Explosion::texture;
-unique_ptr<Shader> Explosion::shader;
+std::unique_ptr<ppgso::Mesh> Explosion::mesh;
+std::unique_ptr<ppgso::Texture> Explosion::texture;
+std::unique_ptr<ppgso::Shader> Explosion::shader;
 
 Explosion::Explosion() {
   // Random rotation and momentum
-  rotation = ballRand(PI)*3.0f;
-  rotMomentum = ballRand(PI)*3.0f;
+  rotation = glm::ballRand(ppgso::PI)*3.0f;
+  rotMomentum = glm::ballRand(ppgso::PI)*3.0f;
   speed = {0.0f, 0.0f, 0.0f};
 
   // Initialize static resources if needed
-  if (!shader) shader = make_unique<Shader>(texture_vert_glsl, texture_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("explosion.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("asteroid.obj");
+  if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("explosion.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("asteroid.obj");
 }
 
 void Explosion::render(Scene &scene) {

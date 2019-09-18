@@ -13,18 +13,14 @@
 
 const unsigned int SIZE = 512;
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
-class BezierWindow : public Window {
+class BezierWindow : public ppgso::Window {
 private:
 
   // Control points for the bezier curves
   // First curve is 4 control points
   // Rest of the curves are 3 control points, each reusing the last curve end
   // Defines the letter "R"
-  vector<vec2> controlPoints = {
+  std::vector<glm::vec2> controlPoints = {
       { 0,  -1},
       { 0, -.3},
       { 0,  .3},
@@ -41,16 +37,16 @@ private:
   };
 
   // This will hold the bezier curve geometry once we generate it
-  vector<vec3> points;
+  std::vector<glm::vec3> points;
 
   // GLSL Program to use for rendering
-  Shader program = {color_vert_glsl, color_frag_glsl};
+  ppgso::Shader program = {color_vert_glsl, color_frag_glsl};
 
   // These numbers are used to pass buffer data to OpenGL
   GLuint vao = 0, vbo = 0;
 
   // Compute points for Bezier curve using 4 control points
-  vec2 bezierPoint(const vec2 &p0, const vec2 &p1, const vec2 &p2, const vec2 &p3, const float t) {
+  glm::vec2 bezierPoint(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const float t) {
     // TODO: Compute point on the Bezier curve
     return {};
   }
@@ -62,7 +58,7 @@ private:
     for(int i = 1; i < (int) controlPoints.size(); i+=3) {
       for (int j = 0; j <= count; j++) {
         // TODO: Generate points for each Bezier curve and insert them
-        vec2 point; //= ??
+        glm::vec2 point; //= ??
         points.emplace_back(point, 0);
       }
     }
@@ -91,12 +87,12 @@ public:
     glEnableVertexAttribArray(position_attrib);
 
     // Set model matrix to identity
-    program.setUniform("ModelMatrix", mat4{});
-    program.setUniform("ViewMatrix", mat4{});
-    program.setUniform("ProjectionMatrix", mat4{});
+    program.setUniform("ModelMatrix", glm::mat4{});
+    program.setUniform("ViewMatrix", glm::mat4{});
+    program.setUniform("ProjectionMatrix", glm::mat4{});
 
     // Set the color uniform
-    program.setUniform("OverallColor", vec3{1.0f,1.0f,1.0f});
+    program.setUniform("OverallColor", glm::vec3{1.0f,1.0f,1.0f});
   }
 
   ~BezierWindow() final {

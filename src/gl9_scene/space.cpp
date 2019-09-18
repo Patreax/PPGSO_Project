@@ -4,15 +4,11 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 Space::Space() {
   // Initialize static resources if needed
-  if (!shader) shader = make_unique<Shader>(texture_vert_glsl, texture_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("stars.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("quad.obj");
+  if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("stars.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("quad.obj");
 }
 
 bool Space::update(Scene &scene, float dt) {
@@ -35,8 +31,8 @@ void Space::render(Scene &scene) {
 
   // Render mesh, not using any projections, we just render in 2D
   shader->setUniform("ModelMatrix", modelMatrix);
-  shader->setUniform("ViewMatrix", mat4{1.0f});
-  shader->setUniform("ProjectionMatrix", mat4{1.0f});
+  shader->setUniform("ViewMatrix", glm::mat4{1.0f});
+  shader->setUniform("ProjectionMatrix", glm::mat4{1.0f});
   shader->setUniform("Texture", *texture);
   mesh->render();
 
@@ -44,6 +40,6 @@ void Space::render(Scene &scene) {
 }
 
 // shared resources
-unique_ptr<Mesh> Space::mesh;
-unique_ptr<Shader> Space::shader;
-unique_ptr<Texture> Space::texture;
+std::unique_ptr<ppgso::Mesh> Space::mesh;
+std::unique_ptr<ppgso::Shader> Space::shader;
+std::unique_ptr<ppgso::Texture> Space::texture;

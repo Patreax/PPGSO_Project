@@ -7,17 +7,14 @@
 
 #include "window.h"
 
-using namespace std;
-using namespace ppgso;
-
-bool Window::pollEvents() {
+bool ppgso::Window::pollEvents() {
   onIdle();
   glfwSwapBuffers(window);
   glfwPollEvents();
   return !glfwWindowShouldClose(window);
 }
 
-Window::Window(std::string title, unsigned int width, unsigned int height) : title{title}, width{width}, height{height} {
+ppgso::Window::Window(std::string title, unsigned int width, unsigned int height) : title{title}, width{width}, height{height} {
   // Set up glfw
   glfwInstance::Init();
 
@@ -35,7 +32,7 @@ Window::Window(std::string title, unsigned int width, unsigned int height) : tit
 
   window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   if (!window)
-    throw runtime_error("Failed to initialize GLFW Window!");
+    throw std::runtime_error("Failed to initialize GLFW Window!");
 
   glfwSetKeyCallback(window, glfw_key_callback);
   glfwSetCursorPosCallback(window, glfw_cursor_pos_callback);
@@ -51,98 +48,98 @@ Window::Window(std::string title, unsigned int width, unsigned int height) : tit
 
 #ifndef NDEBUG
   // Basic OpenGL information to print
-  cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
-  cout << "OpenGL Vendor: " << glGetString(GL_VENDOR) << endl;
-  cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << endl;
-  cout << "OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
+  std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+  std::cout << "OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
+  std::cout << "OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
+  std::cout << "OpenGL Shading Language Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 #endif
 }
 
-Window::~Window() {
+ppgso::Window::~Window() {
   windows.erase(window);
   glfwDestroyWindow(window);
 }
 
-void Window::glfw_key_callback(GLFWwindow *window, int key, int scanCode, int action, int mods) {
+void ppgso::Window::glfw_key_callback(GLFWwindow *window, int key, int scanCode, int action, int mods) {
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) windows[window]->close();
 
   windows[window]->onKey(key, scanCode, action, mods);
 }
 
-void Window::glfw_error_callback(int error, const char *description) {
-  stringstream msg;
-  msg << "GLFW Error " << error << " : " << string{description} << endl;
+void ppgso::Window::glfw_error_callback(int error, const char *description) {
+  std::stringstream msg;
+  msg << "GLFW Error " << error << " : " << std::string{description} << std::endl;
 
-  cerr << msg.str() << endl;
+  std::cerr << msg.str() << std::endl;
 
-  throw runtime_error(msg.str());
+  throw std::runtime_error(msg.str());
 }
 
-void Window::resetViewport() {
+void ppgso::Window::resetViewport() {
   int fbWidth, fbHeight;
   glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
   glViewport(0, 0, fbWidth, fbHeight);
 }
 
-void Window::showCursor() {
+void ppgso::Window::showCursor() {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void Window::hideCursor() {
+void ppgso::Window::hideCursor() {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
-void Window::glfw_cursor_pos_callback(GLFWwindow *window, double cursorX, double cursorY) {
+void ppgso::Window::glfw_cursor_pos_callback(GLFWwindow *window, double cursorX, double cursorY) {
   windows[window]->onCursorPos(cursorX, cursorY);
 }
 
-void Window::glfw_mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {
+void ppgso::Window::glfw_mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {
   windows[window]->onMouseButton(button, action, mods);
 }
 
-void Window::close() {
+void ppgso::Window::close() {
   glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
-void Window::glfw_window_refresh_callback(GLFWwindow *window) {
+void ppgso::Window::glfw_window_refresh_callback(GLFWwindow *window) {
   windows[window]->onRefresh();
 }
 
-void Window::resize(unsigned int width, unsigned int height) {
+void ppgso::Window::resize(unsigned int width, unsigned int height) {
   glfwSetWindowSize(window, width, height);
 }
 
-Window::glewInstance &Window::glewInstance::Init() {
+ppgso::Window::glewInstance& ppgso::Window::glewInstance::Init() {
   static glewInstance instance;
   return instance;
 }
 
-Window::glewInstance::glewInstance() {
+ppgso::Window::glewInstance::glewInstance() {
   glewExperimental = GL_TRUE;
   glewInit();
 
   if (!glewIsSupported("GL_VERSION_3_3"))
-    throw runtime_error("Failed to initialize GLEW with OpenGL 3.3!");
+    throw std::runtime_error("Failed to initialize GLEW with OpenGL 3.3!");
 }
 
 // Store window instances for callbacks
-std::map<GLFWwindow *, Window *> Window::windows;
+std::map<GLFWwindow *, ppgso::Window *> ppgso::Window::windows;
 
-Window::glfwInstance::glfwInstance() {
+ppgso::Window::glfwInstance::glfwInstance() {
   if (!glfwInit())
-    throw runtime_error("Failed to initialize GLFW!");
+    throw std::runtime_error("Failed to initialize GLFW!");
 }
 
-Window::glfwInstance::~glfwInstance() {
+ppgso::Window::glfwInstance::~glfwInstance() {
   glfwTerminate();
 }
 
-Window::glfwInstance &Window::glfwInstance::Init() {
+ppgso::Window::glfwInstance& ppgso::Window::glfwInstance::Init() {
   static glfwInstance instance;
   return instance;
 }
 
-void Window::fpsLimit(bool limit) {
+void ppgso::Window::fpsLimit(bool limit) {
   if(limit) glfwSwapInterval(1);
   glfwSwapInterval(0);
 }

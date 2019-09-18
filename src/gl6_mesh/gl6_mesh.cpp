@@ -10,26 +10,22 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window for displaying multiple meshes projections
  */
-class MeshWindow : public Window {
+class MeshWindow : public ppgso::Window {
 private:
   // Initialize resources
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
 
-  Texture sphereTexture = {image::loadBMP("sphere.bmp")};
-  Texture cursorTexture = {image::loadBMP("lena.bmp")};
+  ppgso::Texture sphereTexture = {ppgso::image::loadBMP("sphere.bmp")};
+  ppgso::Texture cursorTexture = {ppgso::image::loadBMP("lena.bmp")};
 
-  Mesh sphere = {"sphere.obj"};
-  Mesh cursor = {"quad.obj"};
-  Mesh cube = {"cube.obj"};
+  ppgso::Mesh sphere = {"sphere.obj"};
+  ppgso::Mesh cursor = {"quad.obj"};
+  ppgso::Mesh cube = {"cube.obj"};
 
   bool animationEnabled = true;
   double cursorX = 0.0;
@@ -91,16 +87,16 @@ public:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Create object matrices
-    auto cubeMat = rotate(mat4{1.0f}, time, {0.5f, 1.0f, 0.0f});
-    auto sphereMat = translate(mat4{1.0f}, {sin(time), cos(time), 0});
+    auto cubeMat = rotate(glm::mat4{1.0f}, time, {0.5f, 1.0f, 0.0f});
+    auto sphereMat = translate(glm::mat4{1.0f}, {sin(time), cos(time), 0});
     sphereMat = scale(sphereMat, {0.5f, 0.5f, 0.5f});
 
     // Camera position/rotation - for example, translate camera a bit backwards (positive value in Z axis), so we can see the objects
-    auto cameraMat = translate(mat4{1.0f}, {0.0f, 0.0f, -2.5f});
+    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, 0.0f, -2.5f});
     program.setUniform("ViewMatrix", cameraMat);
 
     // Update camera position with perspective projection
-    program.setUniform("ProjectionMatrix", perspective((PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
+    program.setUniform("ProjectionMatrix", glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
 
     // Render objects
     program.setUniform("Texture", sphereTexture);
@@ -114,10 +110,10 @@ public:
     sphere.render();
 
     // Draw cursor using orthographic/parallel projection
-    program.setUniform("ProjectionMatrix", ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1000.0f, -1000.0f));
+    program.setUniform("ProjectionMatrix", glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1000.0f, -1000.0f));
 
     // Create object matrix
-    auto cursorMat =  translate(mat4{1.0f}, {cursorX, cursorY, 0.0f}) * scale(mat4{1.0f}, {0.1f, 0.1f, 0.1f});
+    auto cursorMat =  translate(glm::mat4{1.0f}, {cursorX, cursorY, 0.0f}) * scale(glm::mat4{1.0f}, {0.1f, 0.1f, 0.1f});
 
     // Render objects
     program.setUniform("Texture", cursorTexture);

@@ -2,14 +2,11 @@
 
 #include "camera.h"
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
 
 Camera::Camera(float fow, float ratio, float near, float far) {
-  float fowInRad = (PI/180.0f) * fow;
+  float fowInRad = (ppgso::PI/180.0f) * fow;
 
-  projectionMatrix = perspective(fowInRad, ratio, near, far);
+  projectionMatrix = glm::perspective(fowInRad, ratio, near, far);
 }
 
 void Camera::update() {
@@ -29,6 +26,6 @@ glm::vec3 Camera::cast(float u, float v) {
   planePosition /= planePosition.w;
 
   // Create direction vector
-  auto direction = glm::normalize(planePosition - vec4{position,1.0f});
-  return vec3{direction};
+  auto direction = glm::normalize(planePosition - glm::vec4{position,1.0f});
+  return glm::vec3{direction};
 }

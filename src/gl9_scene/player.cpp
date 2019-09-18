@@ -7,23 +7,19 @@
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 // shared resources
-unique_ptr<Mesh> Player::mesh;
-unique_ptr<Texture> Player::texture;
-unique_ptr<Shader> Player::shader;
+std::unique_ptr<ppgso::Mesh> Player::mesh;
+std::unique_ptr<ppgso::Texture> Player::texture;
+std::unique_ptr<ppgso::Shader> Player::shader;
 
 Player::Player() {
   // Scale the default model
   scale *= 3.0f;
 
   // Initialize static resources if needed
-  if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("corsair.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("corsair.obj");
+  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("corsair.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("corsair.obj");
 }
 
 bool Player::update(Scene &scene, float dt) {
@@ -42,7 +38,7 @@ bool Player::update(Scene &scene, float dt) {
 
     if (distance(position, asteroid->position) < asteroid->scale.y) {
       // Explode
-      auto explosion = make_unique<Explosion>();
+      auto explosion = std::make_unique<Explosion>();
       explosion->position = position;
       explosion->scale = scale * 3.0f;
       scene.objects.push_back(move(explosion));
@@ -55,10 +51,10 @@ bool Player::update(Scene &scene, float dt) {
   // Keyboard controls
   if(scene.keyboard[GLFW_KEY_LEFT]) {
     position.x += 10 * dt;
-    rotation.z = -PI/4.0f;
+    rotation.z = -ppgso::PI/4.0f;
   } else if(scene.keyboard[GLFW_KEY_RIGHT]) {
     position.x -= 10 * dt;
-    rotation.z = PI/4.0f;
+    rotation.z = ppgso::PI/4.0f;
   } else {
     rotation.z = 0;
   }
@@ -70,7 +66,7 @@ bool Player::update(Scene &scene, float dt) {
     // Invert file offset
     fireOffset = -fireOffset;
 
-    auto projectile = make_unique<Projectile>();
+    auto projectile = std::make_unique<Projectile>();
     projectile->position = position + glm::vec3(0.0f, 0.0f, 0.3f) + fireOffset;
     scene.objects.push_back(move(projectile));
   }
@@ -96,5 +92,5 @@ void Player::render(Scene &scene) {
 }
 
 void Player::onClick(Scene &scene) {
-  cout << "Player has been clicked!" << endl;
+  std::cout << "Player has been clicked!" << std::endl;
 }
