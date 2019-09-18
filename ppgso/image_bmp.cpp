@@ -67,8 +67,8 @@ namespace ppgso {
         throw std::runtime_error(msg.str());
       }
 
-      int width = (unsigned int) bmpInfoHeader.biWidth;
-      int height = (unsigned int) abs(bmpInfoHeader.biHeight);
+      int width = bmpInfoHeader.biWidth;
+      int height = abs(bmpInfoHeader.biHeight);
       bool flipped = bmpInfoHeader.biHeight < 0;
 
       if (width == 0 || height == 0) {

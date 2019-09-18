@@ -41,7 +41,7 @@ namespace ppgso {
     GLFWwindow *window;
   public:
     const std::string title;
-    unsigned int width, height;
+    int width, height;
 
     /*!
      * Open new Window and initialize OpenGL 3.3 context
@@ -49,7 +49,7 @@ namespace ppgso {
      * @param width Horizontal size of the window
      * @param height Vertical size of the window
      */
-    Window(std::string title, unsigned int width, unsigned int height);
+    Window(std::string title, int width, int height);
 
     virtual ~Window();
 
@@ -97,7 +97,7 @@ namespace ppgso {
      * @param width Horizontal size in pixels
      * @param height Vertical size in pixels
      */
-    void resize(unsigned int width, unsigned int height);
+    void resize(int width, int height);
 
     /*!
      * Hide mouse cursor

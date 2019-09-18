@@ -14,7 +14,7 @@ bool ppgso::Window::pollEvents() {
   return !glfwWindowShouldClose(window);
 }
 
-ppgso::Window::Window(std::string title, unsigned int width, unsigned int height) : title{title}, width{width}, height{height} {
+ppgso::Window::Window(std::string title, int width, int height) : title{title}, width{width}, height{height} {
   // Set up glfw
   glfwInstance::Init();
 
@@ -105,7 +105,7 @@ void ppgso::Window::glfw_window_refresh_callback(GLFWwindow *window) {
   windows[window]->onRefresh();
 }
 
-void ppgso::Window::resize(unsigned int width, unsigned int height) {
+void ppgso::Window::resize(int width, int height) {
   glfwSetWindowSize(window, width, height);
 }
 
