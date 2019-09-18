@@ -122,8 +122,8 @@ public:
 
       if (scene.cursor.left) {
         // Convert pixel coordinates to Screen coordinates
-        float u = (scene.cursor.x / width - 0.5f) * 2.0f;
-        float v = - (scene.cursor.y / height - 0.5f) * 2.0f;
+        double u = (scene.cursor.x / width - 0.5f) * 2.0f;
+        double v = - (scene.cursor.y / height - 0.5f) * 2.0f;
 
         // Get mouse pick vector in world coordinates
         auto direction = scene.camera->cast(u, v);

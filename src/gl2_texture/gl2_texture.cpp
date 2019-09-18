@@ -35,7 +35,7 @@ private:
    * @param width Width of the image to load
    * @param height Height of the image to load
    */
-  void loadImage(const string &image_file, unsigned int width, unsigned int height) {
+  void loadImage(const string &image_file, int width, int height) {
     // Create new OpenGL texture object identifier
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -48,8 +48,8 @@ private:
     ifstream image_stream(image_file, ios::binary);
 
     // Setup buffer for pixels (r,g,b bytes), since we will not manipulate the image just keep it as char
-    vector<char> buffer(width * height * 3);
-    image_stream.read(buffer.data(), buffer.size());
+    vector<char> buffer(static_cast<std::size_t>(width * height * 3));
+    image_stream.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
     image_stream.close();
 
     // Send the data to OpenGL

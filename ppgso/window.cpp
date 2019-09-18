@@ -17,7 +17,7 @@ bool Window::pollEvents() {
   return !glfwWindowShouldClose(window);
 }
 
-Window::Window(std::string title, unsigned int width, unsigned int height) : title{title}, width{width}, height{height} {
+Window::Window(std::string title, int width, int height) : title{title}, width{width}, height{height} {
   // Set up glfw
   glfwInstance::Init();
 
@@ -108,7 +108,7 @@ void Window::glfw_window_refresh_callback(GLFWwindow *window) {
   windows[window]->onRefresh();
 }
 
-void Window::resize(unsigned int width, unsigned int height) {
+void Window::resize(int width, int height) {
   glfwSetWindowSize(window, width, height);
 }
 
