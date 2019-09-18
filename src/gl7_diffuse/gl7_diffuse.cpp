@@ -9,20 +9,16 @@
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window for displaying a mesh with diffuse lighting
  */
-class DiffuseWindow : public Window {
+class DiffuseWindow : public ppgso::Window {
 private:
-  Shader program = {diffuse_vert_glsl, diffuse_frag_glsl};
-  Texture texture = {image::loadBMP("missile.bmp")};
-  Mesh object = {"missile.obj"};
+  ppgso::Shader program = {diffuse_vert_glsl, diffuse_frag_glsl};
+  ppgso::Texture texture = {ppgso::image::loadBMP("missile.bmp")};
+  ppgso::Mesh object = {"missile.obj"};
 
 public:
   /*!
@@ -30,14 +26,14 @@ public:
    */
   DiffuseWindow() : Window{"gl7_diffuse", SIZE, SIZE} {
     // Set camera position/rotation - for example, translate camera a bit backwards (positive value in Z axis), so we can see the objects
-    auto cameraMat = translate(mat4{1.0f}, {0.0f, 0.0f, -1.0f});
+    auto cameraMat = translate(glm::mat4{1.0f}, {0.0f, 0.0f, -1.0f});
     program.setUniform("ViewMatrix", cameraMat);
 
     // Set camera position with perspective projection
-    program.setUniform("ProjectionMatrix", perspective((PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
+    program.setUniform("ProjectionMatrix", glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
 
     // Set the light direction, assumes simple white directional light
-    program.setUniform("LightDirection", normalize(vec3{1.0f, -1.0f, 1.0f}));
+    program.setUniform("LightDirection", normalize(glm::vec3{1.0f, -1.0f, 1.0f}));
 
     // Set texture as program input
     program.setUniform("Texture", texture);
@@ -62,7 +58,7 @@ public:
   void onKey(int key, int scanCode, int action, int mods) override {
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
       // Set new random light direction
-      program.setUniform("LightDirection", (vec3)sphericalRand(1.0));
+      program.setUniform("LightDirection", (glm::vec3)glm::sphericalRand(1.0));
 
     }
   }
@@ -81,7 +77,7 @@ public:
     auto time = glfwGetTime();
 
     // Create object matrix that rotates in time
-    auto sphereMat = rotate(mat4{1.0f}, (float)time, {0.5f, 1.0f, 0.0f});
+    auto sphereMat = rotate(glm::mat4{1.0f}, (float)time, {0.5f, 1.0f, 0.0f});
 
     // Set the matrix as model matrix for current program
     program.setUniform("ModelMatrix", sphereMat);

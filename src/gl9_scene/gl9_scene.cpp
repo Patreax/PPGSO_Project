@@ -18,16 +18,12 @@
 #include "player.h"
 #include "space.h"
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom windows for our simple game
  */
-class SceneWindow : public Window {
+class SceneWindow : public ppgso::Window {
 private:
   Scene scene;
   bool animate = true;
@@ -40,20 +36,20 @@ private:
     scene.objects.clear();
 
     // Create a camera
-    auto camera = make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
+    auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
     camera->position.z = -15.0f;
     scene.camera = move(camera);
 
     // Add space background
-    scene.objects.push_back(make_unique<Space>());
+    scene.objects.push_back(std::make_unique<Space>());
 
     // Add generator to scene
-    auto generator = make_unique<Generator>();
+    auto generator = std::make_unique<Generator>();
     generator->position.y = 10.0f;
     scene.objects.push_back(move(generator));
 
     // Add player to the scene
-    auto player = make_unique<Player>();
+    auto player = std::make_unique<Player>();
     player->position.y = -6;
     scene.objects.push_back(move(player));
   }

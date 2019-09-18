@@ -11,21 +11,17 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window for demonstrating transformations
  */
-class TransformWindow : public Window {
+class TransformWindow : public ppgso::Window {
 private:
   // Set up needed resources
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
-  Texture texture = {image::loadBMP("lena.bmp")};
-  Mesh quad = {"quad.obj"};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Texture texture = {ppgso::image::loadBMP("lena.bmp")};
+  ppgso::Mesh quad = {"quad.obj"};
 
   // Mode switch
   enum class Mode {
@@ -44,12 +40,12 @@ private:
    * @param time Time to use as parameter or matrix generation
    * @return Model transformation matrix
    */
-  mat4 getModelTransformationMatrix(float time) {
+  glm::mat4 getModelTransformationMatrix(float time) {
     // Create transformation matrix
     // NOTE: glm matrices are declared column major !
     switch (mode) {
       case Mode::IDENTITY:
-        return mat4({
+        return glm::mat4({
           1.0, 0.0, 0.0, 0.0,
           0.0, 1.0, 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
@@ -57,7 +53,7 @@ private:
         });
 
       case Mode::SCALE:
-        return mat4({
+        return glm::mat4({
           sin(time), 0.0, 0.0, 0.0,
           0.0, sin(time), 0.0, 0.0,
           0.0, 0.0, sin(time), 0.0,
@@ -65,7 +61,7 @@ private:
         });
 
       case Mode::SQUASH:
-        return mat4({
+        return glm::mat4({
           sin(time), 0.0, 0.0, 0.0,
           0.0, cos(time), 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
@@ -73,7 +69,7 @@ private:
         });
 
       case Mode::ROTATE:
-        return mat4({
+        return glm::mat4({
           cos(time), sin(time), 0.0, 0.0,
           -sin(time), cos(time), 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
@@ -81,7 +77,7 @@ private:
         });
 
       case Mode::TRANSLATE:
-        return mat4({
+        return glm::mat4({
           1.0, 0.0, 0.0, 0.0,
           0.0, 1.0, 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
@@ -89,17 +85,17 @@ private:
         });
 
       case Mode::ROTATE_TOP_RIGHT:
-        return mat4({ // Move back
+        return glm::mat4({ // Move back
           1.0, 0.0, 0.0, 0.0,
           0.0, 1.0, 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
           1.0, 1.0, 0.0, 1.0,
-        }) * mat4({ // Rotate
+        }) * glm::mat4({ // Rotate
           cos(time), sin(time), 0.0, 0.0,
           -sin(time), cos(time), 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
           0.0, 0.0, 0.0, 1.0,
-        }) * mat4({ // Move to origin
+        }) * glm::mat4({ // Move to origin
           1.0, 0.0, 0.0, 0.0,
           0.0, 1.0, 0.0, 0.0,
           0.0, 0.0, 1.0, 0.0,
@@ -107,14 +103,14 @@ private:
         });
 
       case Mode::ROTATE_TOP_LEFT:
-        return translate(mat4{1.0f}, vec3{-1, 1, 0})
-               * rotate(mat4{1.0f}, time, vec3{0, 0, 1})
-               * glm::translate(mat4{1.0f}, -vec3{-1, 1, 0});
+        return translate(glm::mat4{1.0f}, glm::vec3{-1, 1, 0})
+               * rotate(glm::mat4{1.0f}, time, glm::vec3{0, 0, 1})
+               * glm::translate(glm::mat4{1.0f}, -glm::vec3{-1, 1, 0});
 
       default:
         break;
     }
-    return mat4{1.0f};
+    return glm::mat4{1.0f};
   }
 
 public:
@@ -125,8 +121,8 @@ public:
     // Set program input for texture uniform
     program.setUniform("Texture", texture);
     // Set Matrices to identity so there are no projections/transformations applied in the vertex shader
-    program.setUniform("ViewMatrix", mat4{1.0f});
-    program.setUniform("ProjectionMatrix", mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
   }
 
   /*!

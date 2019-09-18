@@ -20,17 +20,13 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 class Camera {
 public:
   // TODO: Add parameters
-  mat4 viewMatrix;
-  mat4 projectionMatrix;
+  glm::mat4 viewMatrix;
+  glm::mat4 projectionMatrix;
 
   /// Representaiton of
   /// \param fov - Field of view (in degrees)
@@ -49,7 +45,7 @@ public:
 
 /// Abstract renderable object interface
 class Renderable; // Forward declaration for Scene
-using Scene = list<unique_ptr<Renderable>>; // Type alias
+using Scene = std::list<std::unique_ptr<Renderable>>; // Type alias
 
 class Renderable {
 public:
@@ -80,10 +76,10 @@ public:
   /// \param p - Initial position
   /// \param s - Initial speed
   /// \param c - Color of particle
-  Particle(vec3 p, vec3 s, vec3 c) {
+  Particle(glm::vec3 p, glm::vec3 s, glm::vec3 c) {
     // First particle will initialize resources
-    if (!shader) shader = make_unique<Shader>(color_vert_glsl, color_frag_glsl);
-    if (!mesh) mesh = make_unique<Mesh>("sphere.obj");
+    if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
   }
 
   bool update(float dTime, Scene &scene) override {
@@ -105,7 +101,7 @@ public:
 std::unique_ptr<ppgso::Mesh> Particle::mesh;
 std::unique_ptr<ppgso::Shader> Particle::shader;
 
-class ParticleWindow : public Window {
+class ParticleWindow : public ppgso::Window {
 private:
   // Scene of objects
   Scene scene;
@@ -114,7 +110,7 @@ private:
   Camera camera = {120.0f, (float)width/(float)height, 1.0f, 400.0f};
 
   // Store keyboard state
-  map<int, int> keys;
+  std::map<int, int> keys;
 public:
   ParticleWindow() : Window{"task7_particles", SIZE, SIZE} {
     // Initialize OpenGL state

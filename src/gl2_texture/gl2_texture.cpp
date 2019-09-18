@@ -13,20 +13,16 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window to display textured OpenGL quad
  */
-class TextureWindow : public Window {
+class TextureWindow : public ppgso::Window {
 private:
   // OpenGL program and Mesh to use
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
-  Mesh quad = {"quad.obj"};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Mesh quad = {"quad.obj"};
   GLuint texture_id = 0;
 
   /*!
@@ -45,7 +41,7 @@ private:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     // Read raw data
-    ifstream image_stream(image_file, ios::binary);
+    std::ifstream image_stream(image_file, std::ios::binary);
 
     // Setup buffer for pixels (r,g,b bytes), since we will not manipulate the image just keep it as char
     vector<char> buffer(static_cast<std::size_t>(width * height * 3));
@@ -77,9 +73,9 @@ public:
     glBindTexture(GL_TEXTURE_2D, texture_id);
 
     // Set Matrices to identity so there are no projections/transformations applied in the vertex shader
-    program.setUniform("ModelMatrix", mat4{1.0f});
-    program.setUniform("ViewMatrix", mat4{1.0f});
-    program.setUniform("ProjectionMatrix", mat4{1.0f});
+    program.setUniform("ModelMatrix", glm::mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
   }
 
   /*!

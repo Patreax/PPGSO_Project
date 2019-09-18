@@ -12,32 +12,28 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window that will update its contents to create animation
  */
-class AnimateWindow : public Window {
+class AnimateWindow : public ppgso::Window {
 private:
   // Create shading program from included shader sources
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
 
   // Load a quad mesh
-  Mesh quad = {"quad.obj"};
+  ppgso::Mesh quad = {"quad.obj"};
 
   // Initialize texture
-  Texture texture = {SIZE, SIZE};
+  ppgso::Texture texture = {SIZE, SIZE};
 
   /*!
    * Update OpenGL texture with new animation frame
    * @param texture Texture to update
    * @param time Time to generate animation frame for
    */
-  void updateTexture(Texture &texture, double time) {
+  void updateTexture(ppgso::Texture &texture, double time) {
     // Draw something to the texture
     double cx = sin(time);
     double cy = cos(time * 0.9);
@@ -63,14 +59,14 @@ public:
   /*!
    * Construct a new Window and initialize shader uniform variables
    */
-  AnimateWindow() : Window{"gl3_animate", SIZE, SIZE} {
+  AnimateWindow() : ppgso::Window{"gl3_animate", SIZE, SIZE} {
     // Pass the texture to the program as uniform input called "Texture"
     program.setUniform("Texture", texture);
 
     // Set Matrices to identity so there are no projections/transformations applied in the vertex shader
-    program.setUniform("ModelMatrix", mat4{1.0f});
-    program.setUniform("ViewMatrix", mat4{1.0f});
-    program.setUniform("ProjectionMatrix", mat4{1.0f});
+    program.setUniform("ModelMatrix", glm::mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
   }
 
   /*!

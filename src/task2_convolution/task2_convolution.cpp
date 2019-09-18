@@ -5,9 +5,6 @@
 
 #include <ppgso/ppgso.h>
 
-using namespace std;
-using namespace ppgso;
-
 const int kernel_height = 5;
 const int kernel_width = 5;
 float kernel[kernel_height][kernel_width] {
@@ -26,7 +23,7 @@ inline float clamp(float value) {
 int main()
 {
   // We will use ppgso::Image for the source and destination framebuffer this time
-  ppgso::Image source = image::loadBMP("lena.bmp");
+  ppgso::Image source = ppgso::image::loadBMP("lena.bmp");
   ppgso::Image destination(source.width, source.height);
 
   // Traverse the source image, use Image::getPixel to get source samples
@@ -43,9 +40,9 @@ int main()
   }
 
   // Save as result
-  cout << "Generating task2_convolution.bmp file ..." << endl;
-  image::saveBMP(destination, "task2_convolution.bmp");
+  std::cout << "Generating task2_convolution.bmp file ..." << std::endl;
+  ppgso::image::saveBMP(destination, "task2_convolution.bmp");
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;
 }

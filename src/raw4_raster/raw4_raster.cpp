@@ -7,18 +7,14 @@
 #include <ppgso/ppgso.h>
 #include <glm/gtx/euler_angles.hpp>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 /*!
  * Vertex structure to hold per vertex data in
  */
 struct Vertex {
-  vec4 position;
-  vec4 normal;
-  vec2 texCoord;
-  vec4 color;
+  glm::vec4 position;
+  glm::vec4 normal;
+  glm::vec2 texCoord;
+  glm::vec4 color;
 };
 
 /*!
@@ -29,13 +25,13 @@ struct Vertex {
  * @return Linear combination of v0 and v1
  */
 Vertex lerp(const Vertex &v0, const Vertex &v1, float t) {
-  auto z = lerp(1.0f / v0.position.z, 1.0f / v1.position.z, t);
-  auto texCoord = lerp(v0.texCoord / v0.position.z, v1.texCoord / v1.position.z, t) / z;
+  auto z = glm::lerp(1.0f / v0.position.z, 1.0f / v1.position.z, t);
+  auto texCoord = glm::lerp(v0.texCoord / v0.position.z, v1.texCoord / v1.position.z, t) / z;
   return Vertex{
-      lerp(v0.position, v1.position, t),
-      lerp(v0.normal, v1.normal, t),
+      glm::lerp(v0.position, v1.position, t),
+      glm::lerp(v0.normal, v1.normal, t),
       texCoord,
-      lerp(v0.color, v1.color, t)
+      glm::lerp(v0.color, v1.color, t)
   };
 }
 
@@ -51,13 +47,13 @@ public:
   /*!
    * Program constructor that expects texture reference
    */
-  Program(Image &texture) : texture{texture} {};
+  Program(ppgso::Image &texture) : texture{texture} {};
 
   // Uniform inputs common for all vertices
-  Image &texture;
-  mat4 modelMatrix;
-  mat4 viewMatrix;
-  mat4 projectionMatrix;
+  ppgso::Image &texture;
+  glm::mat4 modelMatrix;
+  glm::mat4 viewMatrix;
+  glm::mat4 projectionMatrix;
 
   /*!
    * Vertex shader is a program that can manipulate vertex data, typically changing the vertex position using a perspective projection matrix.
@@ -66,11 +62,11 @@ public:
    */
   Vertex vertexShader(const Vertex &vertex) {
     // Transform the vertex position to world coordinates
-    vec4 worldCoordinates = modelMatrix * vertex.position;
+    glm::vec4 worldCoordinates = modelMatrix * vertex.position;
     // Transform the position to camera coordinates
-    vec4 cameraCoordinates = viewMatrix * worldCoordinates;
+    glm::vec4 cameraCoordinates = viewMatrix * worldCoordinates;
     // Project the camera coordinates to screen coordinates
-    vec4 screenCoordinates = projectionMatrix * cameraCoordinates;
+    glm::vec4 screenCoordinates = projectionMatrix * cameraCoordinates;
     // Multiply normal with modelMatrix so that normals are always in world coordinates.
     // Pass on color and texture coordinates unchanged.
     return Vertex{screenCoordinates, modelMatrix * vertex.normal, vertex.texCoord, vertex.color};
@@ -81,7 +77,7 @@ public:
    * @param varying Varying vertex data that is interpolated from the triangle vertices
    * @return Fragment color
    */
-  vec4 fragmentShader(const Vertex &varying) {
+  glm::vec4 fragmentShader(const Vertex &varying) {
     // Simple directional light
     float lighting = 1; //std::max(0.0f, (float) dot(varying.normal, vec4{.5f, .5f, .5f, 0.0f}));
     // Compute output color
@@ -94,7 +90,7 @@ private:
    * @param textCoord Normalized 2D coordinates to get color sample from.
    * @return
    */
-  vec4 sample(Image &image, vec2 textCoord) {
+  glm::vec4 sample(ppgso::Image &image, glm::vec2 textCoord) {
     // Get the appropriate pixel for given texture coordinates.
     textCoord = clamp(textCoord, 0.0f, 1.0f);
     auto x = (int) (textCoord.x * (image.width - 1));
@@ -102,7 +98,7 @@ private:
     // NOTE: The coordinates are vertically inverted for compatibility with object files generated using Blender 3D.
     auto pixel = image.getPixel(x, image.height-y);
     // Return normalized color vector
-    return vec4{pixel.r / 255.0f, pixel.g / 255.0f, pixel.b / 255.0f, 1.0};
+    return glm::vec4{pixel.r / 255.0f, pixel.g / 255.0f, pixel.b / 255.0f, 1.0};
   }
 };
 
@@ -112,8 +108,8 @@ private:
 class Rasterizer {
 private:
   Program &program;
-  Image &image;
-  vector<float> depthBuffer;
+  ppgso::Image &image;
+  std::vector<float> depthBuffer;
 
   /*!
    * Transform a vertex from screen coordinates to viewport/image coordinates
@@ -122,9 +118,9 @@ private:
    */
   Vertex toViewport(const Vertex &vertex) {
     // Matrix that aligns the screen coordinates to viewport coordinates
-    static const mat4 viewportMatrix = glm::translate(glm::scale(mat4{1.0f}, vec3{image.width / 2.0, -image.height / 2.0, 1.0}), vec3{1, -1, 0});
+    static const glm::mat4 viewportMatrix = glm::translate(glm::scale(glm::mat4{1.0f}, glm::vec3{image.width / 2.0, -image.height / 2.0, 1.0}), glm::vec3{1, -1, 0});
     // First convert homogeneous coordinates to cartesian and transform to viewport
-    vec4 viewportCoordinates = viewportMatrix * (vertex.position / vertex.position.w);
+    glm::vec4 viewportCoordinates = viewportMatrix * (vertex.position / vertex.position.w);
     // Copy rest of the data without change
     return Vertex{viewportCoordinates, vertex.normal, vertex.texCoord, vertex.color};
   }
@@ -149,7 +145,7 @@ private:
     depthBuffer[x + y * image.height] = varying.position.z;
 
     // Compute the fragment color and limit the output
-    vec4 color = clamp(program.fragmentShader(varying), 0.0f, 1.0f);
+    glm::vec4 color = clamp(program.fragmentShader(varying), 0.0f, 1.0f);
     image.setPixel(x, y, color.r, color.g, color.b);
   }
 
@@ -164,7 +160,7 @@ private:
       float yt = v0.position.y >= v2.position.y ? 0 : y / (v2.position.y - v0.position.y);
       Vertex a = lerp(v0, v1, yt);
       Vertex b = lerp(v0, v2, yt);
-      if (a.position.x > b.position.x) swap(a, b);
+      if (a.position.x > b.position.x) std::swap(a, b);
       for (int x = 0; a.position.x + x <= b.position.x; ++x) {
         float xt = a.position.x >= b.position.x ? 0 : x / (b.position.x - a.position.x);
         Vertex varying = lerp(a, b, xt);
@@ -184,7 +180,7 @@ private:
       float yt =  v0.position.y >= v2.position.y ? 0 : y / (v2.position.y - v0.position.y);
       Vertex a = lerp(v0, v2, yt);
       Vertex b = lerp(v1, v2, yt);
-      if (a.position.x > b.position.x) swap(a, b);
+      if (a.position.x > b.position.x) std::swap(a, b);
       for (int x = 0; a.position.x + x <= b.position.x; ++x) {
         float xt = a.position.x >= b.position.x ? 0 : x / (b.position.x - a.position.x);
         Vertex varying = lerp(a, b, xt);
@@ -199,7 +195,7 @@ public:
    * @param image Image to render to
    * @param program Program to use for rendering
    */
-  Rasterizer(Image &image, Program &program) : program{program}, image{image} {
+  Rasterizer(ppgso::Image &image, Program &program) : program{program}, image{image} {
     clear();
   };
 
@@ -208,7 +204,7 @@ public:
    */
   void clear() {
     // Clear the depth buffer
-    depthBuffer = vector<float>((unsigned long) (image.width * image.height), numeric_limits<float>::max());
+    depthBuffer = std::vector<float>((unsigned long) (image.width * image.height), std::numeric_limits<float>::max());
     // Clear the image
     image.clear({128,128,128});
   }
@@ -223,9 +219,9 @@ public:
     Vertex t1 = toViewport(program.vertexShader(face.v1));
     Vertex t2 = toViewport(program.vertexShader(face.v2));
     // Sort the vertices
-    if (t0.position.y > t1.position.y) swap(t0, t1);
-    if (t0.position.y > t2.position.y) swap(t0, t2);
-    if (t1.position.y > t2.position.y) swap(t1, t2);
+    if (t0.position.y > t1.position.y) std::swap(t0, t1);
+    if (t0.position.y > t2.position.y) std::swap(t0, t2);
+    if (t1.position.y > t2.position.y) std::swap(t1, t2);
     // Split the triangle into top/bottom sections
     float t = t0.position.y >= t2.position.y ? 0 : (t1.position.y - t0.position.y) / (t2.position.y - t0.position.y);
     Vertex tm = lerp(t0, t2, t);
@@ -240,30 +236,30 @@ public:
  * Load Wavefront obj file data as vector of faces for simplicity
  * @return vector of Faces that can be rendered
  */
-vector<Face> loadObjFile(const string filename) {
+std::vector<Face> loadObjFile(const std::string filename) {
   // Using tiny obj loader from ppgso lib
-  vector<tinyobj::shape_t> shapes;
-  vector<tinyobj::material_t> materials;
-  string err = tinyobj::LoadObj(shapes, materials, filename.c_str());
+  std::vector<tinyobj::shape_t> shapes;
+  std::vector<tinyobj::material_t> materials;
+  std::string err = tinyobj::LoadObj(shapes, materials, filename.c_str());
 
   // Will only convert 1st shape to Faces
   auto &mesh = shapes[0].mesh;
 
   // Collect data in vectors
-  vector<vec4> positions;
+  std::vector<glm::vec4> positions;
   for (int i = 0; i < (int) mesh.positions.size() / 3; ++i)
     positions.emplace_back(mesh.positions[3 * i], mesh.positions[3 * i + 1], mesh.positions[3 * i + 2], 1);
 
-  vector<vec4> normals;
+  std::vector<glm::vec4> normals;
   for (int i = 0; i < (int) mesh.normals.size() / 3; ++i)
     normals.emplace_back(mesh.normals[3 * i], mesh.normals[3 * i + 1], mesh.normals[3 * i + 2], 1);
 
-  vector<vec2> texcoords;
+  std::vector<glm::vec2> texcoords;
   for (int i = 0; i < (int) mesh.texcoords.size() / 2; ++i)
     texcoords.emplace_back(mesh.texcoords[2 * i], mesh.texcoords[2 * i + 1]);
 
   // Fill the vector of Faces with data
-  vector<Face> faces(mesh.indices.size() / 3);
+  std::vector<Face> faces(mesh.indices.size() / 3);
   for (int i = 0; i < (int) faces.size(); i++) {
     faces[i] = Face{
         {
@@ -289,17 +285,17 @@ vector<Face> loadObjFile(const string filename) {
 
 int main() {
   // Image to store the rendering to
-  Image image{512, 512};
+  ppgso::Image image{512, 512};
   // Vector of faces loaded from Wavefront obj file
   auto faces = loadObjFile("corsair.obj");
   // Image to use as texture in the shader program
-  Image texture{image::loadBMP("corsair.bmp")};
+  ppgso::Image texture{ppgso::image::loadBMP("corsair.bmp")};
   // Shader program to use
   Program program{texture};
   // Set program uniforms
-  program.modelMatrix = orientate4(vec3{0,0.4,.8});
-  program.viewMatrix = lookAt(vec3{0,.7,.7}, vec3{0,0,0}, vec3{.5, .5, 0});
-  program.projectionMatrix = perspective((PI / 180.f) * 60.0f, (float)image.width / (float)image.height, 1.0f, 15.0f);
+  program.modelMatrix = orientate4(glm::vec3{0,0.4,.8});
+  program.viewMatrix = lookAt(glm::vec3{0,.7,.7}, glm::vec3{0,0,0}, glm::vec3{.5, .5, 0});
+  program.projectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, (float)image.width / (float)image.height, 1.0f, 15.0f);
 
   // Rasterizer instance
   Rasterizer rasterizer{image, program};
@@ -309,8 +305,8 @@ int main() {
     rasterizer.render(face);
 
   // Save the image
-  image::saveBMP(image, "raw4_raster.bmp");
+  ppgso::image::saveBMP(image, "raw4_raster.bmp");
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;
 }

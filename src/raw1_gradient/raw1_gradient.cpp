@@ -6,8 +6,6 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
 // Size of the framebuffer
 const unsigned int SIZE = 512;
 
@@ -36,13 +34,13 @@ int main() {
   // Task1: Load RAW image file here instead
 
   // save the raw image to a file
-  cout << "Generating result.raw file ..." << endl;
-  ofstream raw("raw1_gradient.raw", ios::binary);
+  std::cout << "Generating result.raw file ..." << std::endl;
+  std::ofstream raw("raw1_gradient.raw", std::ios::binary);
   raw.write(reinterpret_cast<char *>(framebuffer), sizeof(Pixel)*SIZE*SIZE);
   raw.close();
 
   delete[](framebuffer);
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;
 }

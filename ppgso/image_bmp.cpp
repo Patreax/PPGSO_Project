@@ -3,8 +3,6 @@
 #include <sstream>
 #include "image_bmp.h"
 
-using namespace std;
-
 namespace ppgso {
   namespace image {
 
@@ -39,34 +37,34 @@ namespace ppgso {
       BITMAPFILEHEADER bmpFileHeader = {};
       BITMAPINFOHEADER bmpInfoHeader = {};
 
-      ifstream input_file(bmp, ios::binary);
+      std::ifstream input_file(bmp, std::ios::binary);
 
       // Check headers
       if (!input_file.is_open()) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "Could not open BMP file. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       input_file.read((char *) &bmpFileHeader, sizeof(BITMAPFILEHEADER));
       input_file.read((char *) &bmpInfoHeader, sizeof(BITMAPINFOHEADER));
 
       if (bmpFileHeader.bfType != 19778) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "BMP file does not contain supported BMP format. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       if (bmpInfoHeader.biBitCount != 24) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "BMP file does not contain supported bit count. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       if (bmpInfoHeader.biCompression != 0) { // BI_RGB only
-        stringstream msg;
+        std::stringstream msg;
         msg << "BMP file does not use expected compression method. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       int width = bmpInfoHeader.biWidth;
@@ -74,9 +72,9 @@ namespace ppgso {
       bool flipped = bmpInfoHeader.biHeight < 0;
 
       if (width == 0 || height == 0) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "BMP file does not contain any data. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       Image image{width, height};
@@ -89,11 +87,11 @@ namespace ppgso {
       unsigned int row_padded = (width * sizeof(Image::Pixel) + 3) & (~3);
 
       for (int j = 0; j < height; j++) {
-        auto row_data = vector<Image::Pixel>(row_padded);
+        auto row_data = std::vector<Image::Pixel>(row_padded);
         input_file.read((char *) row_data.data(), row_padded);
         for (int i = 0; i < width; i++) {
           auto pixel = row_data[i];
-          swap(pixel.r, pixel.b);
+          std::swap(pixel.r, pixel.b);
           if (flipped) {
             framebuffer[i + j * width] = pixel;
           } else {
@@ -133,12 +131,12 @@ namespace ppgso {
       bmpInfoHeader.biClrUsed = 0;
       bmpInfoHeader.biClrImportant = 0;
 
-      ofstream output_file(bmp, ios::binary);
+      std::ofstream output_file(bmp, std::ios::binary);
 
       if (!output_file.is_open()) {
-        stringstream msg;
+        std::stringstream msg;
         msg << "Could not open BMP file for writing. " << bmp;
-        throw runtime_error(msg.str());
+        throw std::runtime_error(msg.str());
       }
 
       output_file.write((char *) &bmpFileHeader, sizeof(BITMAPFILEHEADER));
@@ -148,10 +146,10 @@ namespace ppgso {
       output_file.seekp(bmpFileHeader.bfOffBits, output_file.beg);
 
       for (int j = 0; j < height; j++) {
-        auto output_row = vector<Image::Pixel>(row_padded);
+        auto output_row = std::vector<Image::Pixel>(row_padded);
         for (int i = 0; i < width; i++) {
           auto pixel = framebuffer[i + (height - 1 - j) * width];
-          swap(pixel.r, pixel.b);
+          std::swap(pixel.r, pixel.b);
           output_row[i] = pixel;
         }
         output_file.write((char *) output_row.data(), row_padded);

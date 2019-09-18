@@ -14,26 +14,22 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window for displaying FBO object
  */
-class FramebufferWindow : public Window {
+class FramebufferWindow : public ppgso::Window {
 private:
   // Objects to be rendered into the framebuffer
-  Shader sphereShader = {texture_vert_glsl, texture_frag_glsl};
-  Mesh sphereMesh = {"sphere.obj"};
-  Texture sphereTexture = {image::loadBMP("sphere.bmp")};
+  ppgso::Shader sphereShader = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Mesh sphereMesh = {"sphere.obj"};
+  ppgso::Texture sphereTexture = {ppgso::image::loadBMP("sphere.bmp")};
 
   // Objects to render the framebuffer on to
-  Shader quadShader = {convolution_vert_glsl, convolution_frag_glsl};
-  Mesh quadMesh = {"quad.obj"};
-  Texture quadTexture = {SIZE, SIZE};
+  ppgso::Shader quadShader = {convolution_vert_glsl, convolution_frag_glsl};
+  ppgso::Mesh quadMesh = {"quad.obj"};
+  ppgso::Texture quadTexture = {SIZE, SIZE};
 
   // OpenGL object ids for framebuffer and render buffer
   GLuint fbo = 0;
@@ -67,7 +63,7 @@ public:
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, quadTexture.getTexture(), 0);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-      throw runtime_error("Cannot create framebuffer!");
+      throw std::runtime_error("Cannot create framebuffer!");
     }
   }
 
@@ -97,13 +93,13 @@ public:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
-    auto sphereProjectionMatrix = perspective((PI / 180.f) * 60.0f, (float)SIZE/(float)SIZE, 1.0f, 10.0f);
+    auto sphereProjectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, (float)SIZE/(float)SIZE, 1.0f, 10.0f);
 
     // Create view matrix (translate camera backwards a bit, so we can see the geometry)
-    auto sphereViewMatrix = translate(mat4{1.0}, {0.0f, 0.0f, -1.5f});
+    auto sphereViewMatrix = glm::translate(glm::mat4{1.0}, {0.0f, 0.0f, -1.5f});
 
     // Assign sphere texture
-    auto sphereModelMatrix = rotate(mat4{1.0f}, time, {0, 1, 0});
+    auto sphereModelMatrix = glm::rotate(glm::mat4{1.0f}, time, {0, 1, 0});
 
     // Set shader inputs
     sphereShader.use();
@@ -125,13 +121,13 @@ public:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
-    auto quadProjectionMatrix = perspective((PI / 180.f) * 60.0f, (float)SIZE/(float)SIZE, 1.0f, 10.0f);
+    auto quadProjectionMatrix = glm::perspective((ppgso::PI / 180.f) * 60.0f, (float)SIZE/(float)SIZE, 1.0f, 10.0f);
 
     // Create view matrix (translate camera backwards a bit, so we can see the geometry)
-    auto quadViewMatrix = translate(mat4{1.0f}, {0.0f, 0.0f, -3.0f});
+    auto quadViewMatrix = glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -3.0f});
 
     // Animate rotation of the quad
-    auto quadModelMatrix = rotate(mat4{1.0f}, sin(time / 2.0f) * 1.5f, {0, 1, .1});
+    auto quadModelMatrix = glm::rotate(glm::mat4{1.0f}, sinf(time / 2.0f) * 1.5f, {0, 1, .1});
 
     // Set shader inputs
     quadShader.use();

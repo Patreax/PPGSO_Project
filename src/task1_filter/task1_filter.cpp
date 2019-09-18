@@ -4,8 +4,6 @@
 #include <fstream>
 #include <iostream>
 
-using namespace std;
-
 // Size of the framebuffer
 const unsigned int SIZE = 512;
 
@@ -31,11 +29,11 @@ int main()
   }
 
   // TODO: Open file result.raw
-  cout << "Generating result.raw file ..." << endl;
+  std::cout << "Generating result.raw file ..." << std::endl;
 
   // TODO: Write the framebuffer to the file and close it
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   delete[] framebuffer;
   return EXIT_SUCCESS;
 }
