@@ -106,7 +106,7 @@ class ShapeWindow : public Window {
 private:
   Shape shape1, shape2;
 public:
-  ShapeWindow() : Window{"task5_2dshapes", SIZE, SIZE} {
+  ShapeWindow() : Window{"task4_2dshapes", SIZE, SIZE} {
     shape1.color = {1,0,0};
     shape2.color = {0,1,0};
   }

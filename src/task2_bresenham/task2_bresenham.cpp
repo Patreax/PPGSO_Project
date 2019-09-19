@@ -36,8 +36,8 @@ int main()
     drawLine(framebuffer, points[i], points[i+1]);
 
   // Save the result
-  cout << "Generating task3_bresenham.bmp file ..." << endl;
-  image::saveBMP(framebuffer, "task3_bresenham.bmp");
+  cout << "Generating task2_bresenham.bmp file ..." << endl;
+  image::saveBMP(framebuffer, "task2_bresenham.bmp");
 
   cout << "Done." << endl;
   return EXIT_SUCCESS;
