@@ -8,11 +8,8 @@
 #include "texture.h"
 #include "shader.h"
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
 
-Shader::Shader(const string &vertex_shader_code, const string &fragment_shader_code) {
+ppgso::Shader::Shader(const std::string &vertex_shader_code, const std::string &fragment_shader_code) {
   // Create shaders
   auto vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
   auto fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
@@ -28,13 +25,13 @@ Shader::Shader(const string &vertex_shader_code, const string &fragment_shader_c
   glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &result);
   if (result == GL_FALSE) {
     glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &info_length);
-    string vertex_shader_log((unsigned int) info_length, ' ');
+    std::string vertex_shader_log((unsigned int) info_length, ' ');
     glGetShaderInfoLog(vertex_shader_id, info_length, nullptr,
                        &vertex_shader_log[0]);
-    stringstream msg;
-    msg << "Error Compiling Vertex Shader ..." << endl;
+    std::stringstream msg;
+    msg << "Error Compiling Vertex Shader ..." << std::endl;
     msg << vertex_shader_log;
-    throw runtime_error(msg.str());
+    throw std::runtime_error(msg.str());
   }
 
   // Compile fragment shader
@@ -46,13 +43,13 @@ Shader::Shader(const string &vertex_shader_code, const string &fragment_shader_c
   glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &result);
   if (result == GL_FALSE) {
     glGetShaderiv(fragment_shader_id, GL_INFO_LOG_LENGTH, &info_length);
-    string fragment_shader_log((unsigned long) info_length, ' ');
+    std::string fragment_shader_log((unsigned long) info_length, ' ');
     glGetShaderInfoLog(fragment_shader_id, info_length, nullptr,
                        &fragment_shader_log[0]);
-    stringstream msg;
-    msg << "Error Compiling Fragment Shader ..." << endl;
-    msg << fragment_shader_log << endl;
-    throw runtime_error(msg.str());
+    std::stringstream msg;
+    msg << "Error Compiling Fragment Shader ..." << std::endl;
+    msg << fragment_shader_log << std::endl;
+    throw std::runtime_error(msg.str());
   }
 
   // Create and link the program
@@ -66,12 +63,12 @@ Shader::Shader(const string &vertex_shader_code, const string &fragment_shader_c
   glGetProgramiv(program_id, GL_LINK_STATUS, &result);
   if (result == GL_FALSE) {
     glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &info_length);
-    string program_log((unsigned long) info_length, ' ');
+    std::string program_log((unsigned long) info_length, ' ');
     glGetProgramInfoLog(program_id, info_length, nullptr, &program_log[0]);
-    stringstream msg;
-    msg << "Error Linking Shader Program ..." << endl;
+    std::stringstream msg;
+    msg << "Error Linking Shader Program ..." << std::endl;
     msg << program_log;
-    throw runtime_error(msg.str());
+    throw std::runtime_error(msg.str());
   }
   glDeleteShader(vertex_shader_id);
   glDeleteShader(fragment_shader_id);
@@ -80,66 +77,66 @@ Shader::Shader(const string &vertex_shader_code, const string &fragment_shader_c
   use();
 }
 
-Shader::~Shader() {
+ppgso::Shader::~Shader() {
   glDeleteProgram( program );
 }
 
-void Shader::use() const {
+void ppgso::Shader::use() const {
   glUseProgram(program);
 }
 
-GLuint Shader::getAttribLocation(const string &name) const {
+GLuint ppgso::Shader::getAttribLocation(const std::string &name) const {
   use();
   return (GLuint) glGetAttribLocation(program, name.c_str());
 }
 
-GLuint Shader::getUniformLocation(const string &name) const {
+GLuint ppgso::Shader::getUniformLocation(const std::string &name) const {
   use();
   return (GLuint) glGetUniformLocation(program, name.c_str());
 }
 
-void Shader::setUniform(const std::string &name, const Texture &texture, const int id) const {
+void ppgso::Shader::setUniform(const std::string &name, const Texture &texture, const int id) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform1i(uniform, id);
   texture.bind(id);
 }
 
-void Shader::setUniform(const std::string &name, glm::mat4 matrix) const {
+void ppgso::Shader::setUniform(const std::string &name, glm::mat4 matrix) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniformMatrix4fv(uniform, 1, GL_FALSE, value_ptr(matrix));
 }
 
-void Shader::setUniform(const std::string &name, glm::mat3 matrix) const {
+void ppgso::Shader::setUniform(const std::string &name, glm::mat3 matrix) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniformMatrix3fv(uniform, 1, GL_FALSE, value_ptr(matrix));
 }
 
-void Shader::setUniform(const std::string &name, float value) const {
+void ppgso::Shader::setUniform(const std::string &name, float value) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform1f(uniform, value);
 }
 
-GLuint Shader::getProgram() const {
+GLuint ppgso::Shader::getProgram() const {
   return program;
 }
 
-void Shader::setUniform(const std::string &name, glm::vec2 vector) const {
+void ppgso::Shader::setUniform(const std::string &name, glm::vec2 vector) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform2fv(uniform, 1, value_ptr(vector));
 }
 
-void Shader::setUniform(const std::string &name, glm::vec3 vector) const {
+void ppgso::Shader::setUniform(const std::string &name, glm::vec3 vector) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform3fv(uniform, 1, value_ptr(vector));
 }
 
-void Shader::setUniform(const std::string &name, glm::vec4 vector) const {
+void ppgso::Shader::setUniform(const std::string &name, glm::vec4 vector) const {
   use();
   auto uniform = getUniformLocation(name.c_str());
   glUniform4fv(uniform, 1, value_ptr(vector));

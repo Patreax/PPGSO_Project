@@ -15,10 +15,6 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 // Object to represent 2D OpenGL shape
@@ -26,7 +22,7 @@ class Shape {
 private:
   // 2D vectors define points/vertices of the shape
   // TODO: Define your shape points
-  vector<vec3> vetrices;
+  std::vector<glm::vec3> vetrices;
 
   // Structure representing a triangular face, usually indexes into vertices
   struct Face {
@@ -35,20 +31,20 @@ private:
 
   // Indices define triangles that index into vertices
   // TODO: Define your mesh indices
-  vector<Face> mesh;
+  std::vector<Face> mesh;
 
   // Program to associate with the object
-  Shader program = {color_vert_glsl, color_frag_glsl};
+  ppgso::Shader program = {color_vert_glsl, color_frag_glsl};
 
   // These will hold the data and object buffers
   GLuint vao, vbo, cbo, ibo;
-  mat4 modelMatrix;
+  glm::mat4 modelMatrix{1.0f};
 public:
   // Public attributes that define position, color ..
-  vec3 position{0,0,0};
-  vec3 rotation{0,0,0};
-  vec3 scale{1,1,1};
-  vec3 color{1,0,0};
+  glm::vec3 position{0,0,0};
+  glm::vec3 rotation{0,0,0};
+  glm::vec3 scale{1,1,1};
+  glm::vec3 color{1,0,0};
 
   // Initialize object data buffers
   Shape() {
@@ -59,7 +55,7 @@ public:
     // Copy positions to gpu
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vetrices.size() * sizeof(vec3), vetrices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vetrices.size() * sizeof(glm::vec3), vetrices.data(), GL_STATIC_DRAW);
 
     // Set vertex program inputs
     auto position_attrib = program.getAttribLocation("Position");
@@ -72,8 +68,8 @@ public:
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.size() * sizeof(Face), mesh.data(), GL_STATIC_DRAW);
 
     // Set projection matrices to identity
-    program.setUniform("ProjectionMatrix", mat4{});
-    program.setUniform("ViewMatrix", mat4{});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
   };
   // Clean up
   ~Shape() {
@@ -102,7 +98,7 @@ public:
   };
 };
 
-class ShapeWindow : public Window {
+class ShapeWindow : public ppgso::Window {
 private:
   Shape shape1, shape2;
 public:

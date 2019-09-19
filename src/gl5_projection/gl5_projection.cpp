@@ -14,24 +14,20 @@
 #include <shaders/texture_vert_glsl.h>
 #include <shaders/texture_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window for demonstrating projections
  */
-class ProjectionWindow : public Window {
+class ProjectionWindow : public ppgso::Window {
 private:
   // Load shader program, geometry and texture
-  Shader program = {texture_vert_glsl, texture_frag_glsl};
-  Mesh quad = {"quad.obj"};
-  Texture texture = {image::loadBMP("lena.bmp")};
+  ppgso::Shader program = {texture_vert_glsl, texture_frag_glsl};
+  ppgso::Mesh quad = {"quad.obj"};
+  ppgso::Texture texture = {ppgso::image::loadBMP("lena.bmp")};
 
   // Model matrix for each quad
-  mat4 quad1ModelMatrix, quad2ModelMatrix;
+  glm::mat4 quad1ModelMatrix, quad2ModelMatrix;
 
   // Mode switch
   enum class Mode {
@@ -48,19 +44,19 @@ private:
       case Mode::PERSPECTIVE:
         // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
         // You can think of this as the camera objective settings
-        program.setUniform("ProjectionMatrix", perspective((PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
+        program.setUniform("ProjectionMatrix", glm::perspective((ppgso::PI / 180.f) * 60.0f, 1.0f, 0.1f, 10.0f));
 
         // Create view matrix (translate camera a bit backwards, so we can see the geometry)
-        program.setUniform("ViewMatrix", translate(mat4{1.0f}, {0.0f, 0.0f, -3.0f}));
+        program.setUniform("ViewMatrix", glm::translate(glm::mat4{1.0f}, {0.0f, 0.0f, -3.0f}));
         break;
       case Mode::PARALLEL:
         // Create projection matrix (field of view (radians), aspect ratio, near plane distance, far plane distance)
         // You can think of this as the camera objective settings
-        program.setUniform("ProjectionMatrix", ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 10.0f));
+        program.setUniform("ProjectionMatrix", glm::ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 10.0f));
 
         // Create view matrix using the glm::lookAt function
         // This can be seen as the camera position/rotation in space
-        program.setUniform("ViewMatrix", lookAt(vec3{2.0f, 2.0f, 2.0f}, vec3{0.0f, 0.0f, 0.0f}, vec3{0.0f, 1.0f, 0.0f}));
+        program.setUniform("ViewMatrix", glm::lookAt(glm::vec3{2.0f, 2.0f, 2.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f}));
         break;
       default:
         break;
@@ -87,8 +83,8 @@ public:
 
     // Quad positions
     // Coordinates in world coordinates
-    quad1ModelMatrix = translate(mat4{1.0f}, {0, 0, 1});
-    quad2ModelMatrix = translate(mat4{1.0f}, {0, 0, -1});
+    quad1ModelMatrix = translate(glm::mat4{1.0f}, {0, 0, 1});
+    quad2ModelMatrix = translate(glm::mat4{1.0f}, {0, 0, -1});
   }
 
   /*!
@@ -112,7 +108,7 @@ public:
   void onIdle() override {
     // Update time and create a rotation matrix
     auto time = glfwGetTime();
-    auto rotateMat = rotate(mat4{1.0f}, (float)time, {0, 1, 0});
+    auto rotateMat = rotate(glm::mat4{1.0f}, (float)time, {0, 1, 0});
 
     // Set up projection and view matrix
     setProjection();

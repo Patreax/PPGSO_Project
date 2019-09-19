@@ -8,9 +8,6 @@
 
 #include <ppgso/ppgso.h>
 
-using namespace std;
-using namespace ppgso;
-
 // Size of the framebuffer
 const unsigned int SIZE = 512;
 
@@ -29,7 +26,7 @@ int main()
   ppgso::Image framebuffer(SIZE, SIZE);
 
   // TODO: Generate star points
-  vector<Point> points;
+  std::vector<Point> points;
 
   // Draw lines
   for(unsigned int i = 0; i < points.size() - 1; i++)
@@ -39,7 +36,7 @@ int main()
   cout << "Generating task2_bresenham.bmp file ..." << endl;
   image::saveBMP(framebuffer, "task2_bresenham.bmp");
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;
 }
 

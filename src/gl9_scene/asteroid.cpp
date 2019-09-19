@@ -6,26 +6,23 @@
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
 
 // Static resources
-unique_ptr<Mesh> Asteroid::mesh;
-unique_ptr<Texture> Asteroid::texture;
-unique_ptr<Shader> Asteroid::shader;
+std::unique_ptr<ppgso::Mesh> Asteroid::mesh;
+std::unique_ptr<ppgso::Texture> Asteroid::texture;
+std::unique_ptr<ppgso::Shader> Asteroid::shader;
 
 Asteroid::Asteroid() {
   // Set random scale speed and rotation
-  scale *= linearRand(1.0f, 3.0f);
-  speed = {linearRand(-2.0f, 2.0f), linearRand(-5.0f, -10.0f), 0.0f};
-  rotation = ballRand(PI);
-  rotMomentum = ballRand(PI);
+  scale *= glm::linearRand(1.0f, 3.0f);
+  speed = {glm::linearRand(-2.0f, 2.0f), glm::linearRand(-5.0f, -10.0f), 0.0f};
+  rotation = glm::ballRand(ppgso::PI);
+  rotMomentum = glm::ballRand(ppgso::PI);
 
   // Initialize static resources if needed
-  if (!shader) shader = make_unique<Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-  if (!texture) texture = make_unique<Texture>(image::loadBMP("asteroid.bmp"));
-  if (!mesh) mesh = make_unique<Mesh>("asteroid.obj");
+  if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+  if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("asteroid.bmp"));
+  if (!mesh) mesh = std::make_unique<ppgso::Mesh>("asteroid.obj");
 }
 
 bool Asteroid::update(Scene &scene, float dt) {
@@ -79,9 +76,9 @@ bool Asteroid::update(Scene &scene, float dt) {
   return true;
 }
 
-void Asteroid::explode(Scene &scene, vec3 explosionPosition, vec3 explosionScale, int pieces) {
+void Asteroid::explode(Scene &scene, glm::vec3 explosionPosition, glm::vec3 explosionScale, int pieces) {
   // Generate explosion
-  auto explosion = make_unique<Explosion>();
+  auto explosion = std::make_unique<Explosion>();
   explosion->position = explosionPosition;
   explosion->scale = explosionScale;
   explosion->speed = speed / 2.0f;
@@ -89,8 +86,8 @@ void Asteroid::explode(Scene &scene, vec3 explosionPosition, vec3 explosionScale
 
   // Generate smaller asteroids
   for (int i = 0; i < pieces; i++) {
-    auto asteroid = make_unique<Asteroid>();
-    asteroid->speed = speed + vec3(linearRand(-3.0f, 3.0f), linearRand(0.0f, -5.0f), 0.0f);;
+    auto asteroid = std::make_unique<Asteroid>();
+    asteroid->speed = speed + glm::vec3(glm::linearRand(-3.0f, 3.0f), glm::linearRand(0.0f, -5.0f), 0.0f);;
     asteroid->position = position;
     asteroid->rotMomentum = rotMomentum;
     float factor = (float) pieces / 2.0f;
@@ -116,7 +113,7 @@ void Asteroid::render(Scene &scene) {
 }
 
 void Asteroid::onClick(Scene &scene) {
-  cout << "Asteroid clicked!" << endl;
+  std::cout << "Asteroid clicked!" << std::endl;
   explode(scene, position, {10.0f, 10.0f, 10.0f}, 0 );
   age = 10000;
 }

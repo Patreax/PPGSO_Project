@@ -7,27 +7,23 @@
 #include <iostream>
 #include <ppgso/ppgso.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 // Global constants
-const double INF = numeric_limits<double>::max();           // Will be used for infinity
-const double EPS = numeric_limits<double>::epsilon();       // Numerical Epsilon
+const double INF = std::numeric_limits<double>::max();           // Will be used for infinity
+const double EPS = std::numeric_limits<double>::epsilon();       // Numerical Epsilon
 const double DELTA = sqrt(EPS);                             // Delta to use
 
 /*!
  * Structure holding origin and direction that represents a ray
  */
 struct Ray {
-  dvec3 origin, direction;
+  glm::dvec3 origin, direction;
 
   /*!
    * Compute a point on the ray
    * @param t Distance from origin
    * @return Point on ray where t is the distance from the origin
    */
-  inline dvec3 point(double t) const {
+  inline glm::dvec3 point(double t) const {
     return origin + direction * t;
   }
 };
@@ -36,7 +32,7 @@ struct Ray {
  * Material coefficients for diffuse and emission
  */
 struct Material {
-  dvec3 emission, diffuse;
+  glm::dvec3 emission, diffuse;
   double shininess;
 };
 
@@ -45,7 +41,7 @@ struct Material {
  */
 struct Hit {
   double distance;
-  dvec3 point, normal;
+  glm::dvec3 point, normal;
   Material material;
 };
 
@@ -58,7 +54,7 @@ const Hit noHit = { INF, {0,0,0}, {0,0,0}, { {0,0,0}, {0,0,0}, 0 } };
  * Structure representing a simple camera that is composed on position, up, back and right vectors
  */
 struct Camera {
-  dvec3 position, back, up, right;
+  glm::dvec3 position, back, up, right;
 
   /*!
  * Generate a new Ray for the given viewport size and position
@@ -70,14 +66,14 @@ struct Camera {
  */
   Ray generateRay(int x, int y, int width, int height) const {
     // Camera deltas
-    dvec3 vdu = 2.0 * right / (double)width;
-    dvec3 vdv = 2.0 * -up / (double)height;
+    glm::dvec3 vdu = 2.0 * right / (double)width;
+    glm::dvec3 vdv = 2.0 * -up / (double)height;
 
     Ray ray;
     ray.origin = position;
     ray.direction = -back
-                    + vdu * ((double)(-width/2 + x) + linearRand(0.0, 1.0))
-                    + vdv * ((double)(-height/2 + y) + linearRand(0.0, 1.0));
+                    + vdu * ((double)(-width/2 + x) + glm::linearRand(0.0, 1.0))
+                    + vdv * ((double)(-height/2 + y) + glm::linearRand(0.0, 1.0));
     ray.direction = normalize(ray.direction);
     return ray;
   }
@@ -87,7 +83,7 @@ struct Camera {
  * Point light represented by color and position
  */
 struct Light {
-  dvec3 position, color;
+  glm::dvec3 position, color;
   double att_const, att_linear, att_quad;
 };
 
@@ -96,7 +92,7 @@ struct Light {
  */
 struct Sphere {
   double radius;
-  dvec3 center;
+  glm::dvec3 center;
   Material material;
 
   /*!
@@ -138,12 +134,12 @@ struct Sphere {
  * @param normal Normal that defines the dome/half-sphere direction
  * @return Random 3D vector on the dome surface
  */
-inline dvec3 RandomDome(const dvec3 &normal) {
+inline glm::dvec3 RandomDome(const glm::dvec3 &normal) {
   double d;
-  dvec3 p;
+  glm::dvec3 p;
 
   do {
-    p = sphericalRand(1.0);
+    p = glm::sphericalRand(1.0);
     d = dot(p, normal);
   } while(d < 0);
 
@@ -155,8 +151,8 @@ inline dvec3 RandomDome(const dvec3 &normal) {
  */
 struct World {
   Camera camera;
-  vector<Light> lights;
-  vector<Sphere> spheres;
+  std::vector<Light> lights;
+  std::vector<Sphere> spheres;
 
   /*!
    * Compute ray to object collision with any object in the world
@@ -181,17 +177,17 @@ struct World {
    * @param depth Maximum number of collisions to trace
    * @return Color representing the accumulated lighting for earch ray collision
    */
-  inline dvec3 trace(const Ray &ray) const {
+  inline glm::dvec3 trace(const Ray &ray) const {
     Hit hit = cast(ray);
 
     // No hit
     if (hit.distance >= INF) return {0, 0, 0};
 
     // Phong components
-    dvec3 ambientColor = {0.1, 0.1, 0.1};
-    dvec3 emissionColor = hit.material.emission;
-    dvec3 diffuseColor = {0,0,0};
-    dvec3 specularColor = {0,0,0};
+    glm::dvec3 ambientColor = {0.1, 0.1, 0.1};
+    glm::dvec3 emissionColor = hit.material.emission;
+    glm::dvec3 diffuseColor = {0,0,0};
+    glm::dvec3 specularColor = {0,0,0};
     for( auto& light : lights) {
       auto lightDirection = light.position - hit.point;
       auto lightDistance = length(lightDirection);
@@ -219,11 +215,11 @@ struct World {
    * Render the world to the provided image
    * @param image Image to render to
    */
-  void render(Image& image, unsigned int samples) const {
+  void render(ppgso::Image& image, unsigned int samples) const {
     // Render section of the framebuffer
     for(int y = 0; y < image.height; ++y) {
       for (int x = 0; x < image.width; ++x) {
-        dvec3 color{};
+        glm::dvec3 color{};
         for (unsigned int i = 0; i < samples; i++) {
           auto ray = camera.generateRay(x, y, image.width, image.height);
           color = color + trace(ray);
@@ -237,7 +233,7 @@ struct World {
 
 int main() {
   // Image to render to
-  Image image {512, 512};
+  ppgso::Image image {512, 512};
 
   // World to render
   const World world = {
@@ -267,8 +263,8 @@ int main() {
   world.render(image, 4);
 
   // Save the result
-  image::saveBMP(image, "raw2_raycast.bmp");
+  ppgso::image::saveBMP(image, "raw2_raycast.bmp");
 
-  cout << "Done." << endl;
+  std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;
 }

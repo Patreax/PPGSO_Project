@@ -11,20 +11,16 @@
 #include <shaders/color_frag_glsl.h>
 #include <shaders/color_vert_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 /*!
  * Custom window that will display a gradient with OpenGL
  * Inherits from ppgso::Window which hides implementation using the glfw library
  */
-class GradientWindow : public Window {
+class GradientWindow : public ppgso::Window {
 private:
   // Vertices a single triangle
-  vector<vec3> vertex_buffer{
+  std::vector<glm::vec3> vertex_buffer{
       // x, y
       {0.0f, 0.8f, 0.0f},
       {0.8f,  -0.8f, 0.0f},
@@ -32,7 +28,7 @@ private:
   };
 
   // Colors for vertices
-  vector<vec3> color_buffer{
+  std::vector<glm::vec3> color_buffer{
       // r, g, b
       {1.0f, 0.0f, 0.0f},
       {0.0f, 1.0f, 0.0f},
@@ -40,7 +36,7 @@ private:
   };
 
   // Shader program to use for rendering
-  Shader program = {color_vert_glsl, color_frag_glsl};
+  ppgso::Shader program = {color_vert_glsl, color_frag_glsl};
 
   // OpenGL object handles to keep track of
   GLuint vao = 0;
@@ -59,26 +55,26 @@ public:
     // Generate a vertex buffer object, this will feed data to the vertex shader
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(vec3), vertex_buffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertex_buffer.size() * sizeof(glm::vec3), vertex_buffer.data(), GL_STATIC_DRAW);
 
     // Setup vertex array lookup, this tells the shader how to pick data for the "Position" input
     auto position_attrib = program.getAttribLocation("Position");
-    glVertexAttribPointer(position_attrib, sizeof(vec3)/sizeof(float), GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(position_attrib, sizeof(glm::vec3)/sizeof(float), GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(position_attrib);
 
     // Same thing for colors
     glGenBuffers(1, &cbo);
     glBindBuffer(GL_ARRAY_BUFFER, cbo);
-    glBufferData(GL_ARRAY_BUFFER, color_buffer.size() * sizeof(vec3), color_buffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, color_buffer.size() * sizeof(glm::vec3), color_buffer.data(), GL_STATIC_DRAW);
 
     auto color_attrib = program.getAttribLocation("Color");
-    glVertexAttribPointer(color_attrib, sizeof(vec3)/sizeof(float), GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(color_attrib, sizeof(glm::vec3)/sizeof(float), GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(color_attrib);
 
     // Set Matrices to identity so there are no projections/transformations applied in the vertex shader
-    program.setUniform("ModelMatrix", mat4{1.0f});
-    program.setUniform("ViewMatrix", mat4{1.0f});
-    program.setUniform("ProjectionMatrix", mat4{1.0f});
+    program.setUniform("ModelMatrix", glm::mat4{1.0f});
+    program.setUniform("ViewMatrix", glm::mat4{1.0f});
+    program.setUniform("ProjectionMatrix", glm::mat4{1.0f});
   }
 
   /*!
