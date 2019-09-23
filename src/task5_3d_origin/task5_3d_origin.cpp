@@ -15,10 +15,6 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 
-using namespace std;
-using namespace glm;
-using namespace ppgso;
-
 const unsigned int SIZE = 512;
 
 // Object to represent a 3D cube
@@ -26,7 +22,7 @@ class Cube {
 private:
     // 2D vectors define points/vertices of the shape
 	 // TODO: Define cube vertices
-    vector<vec3> vertices;
+    std::vector<glm::vec3> vertices;
 
     // Structure representing a triangular face
     struct Face {
@@ -35,22 +31,22 @@ private:
 
     // Indices define triangles that index into vertices
 	 // TODO: Define cube indices
-    vector<Face> indices;
+    std::vector<Face> indices;
 
     // Program to associate with the object
-    Shader program = {color_vert_glsl, color_frag_glsl};
+    ppgso::Shader program = {color_vert_glsl, color_frag_glsl};
 
     // These will hold the data and object buffers
     GLuint vao, vbo, cbo, ibo;
-    mat4 modelMatrix;
-    mat4 viewMatrix;
+    glm::mat4 modelMatrix;
+    glm::mat4 viewMatrix;
 
 public:
     // Public attributes that define position, color ..
-    vec3 position{0,0,0};
-    vec3 rotation{0,0,0};
-    vec3 scale{1,1,1};
-    vec3 color{1,0,0};
+    glm::vec3 position{0,0,0};
+    glm::vec3 rotation{0,0,0};
+    glm::vec3 scale{1,1,1};
+    glm::vec3 color{1,0,0};
 
 
     // Initialize object data buffers
@@ -62,7 +58,7 @@ public:
         // Copy positions to gpu
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 
         // Set vertex program inputs
         auto position_attrib = program.getAttribLocation("Position");
@@ -95,7 +91,7 @@ public:
 
     }
 
-    void updateViewMatrix(vec3 viewRotation) {
+    void updateViewMatrix(glm::vec3 viewRotation) {
         // Compute transformation by scaling, rotating and then translating the shape
 		// TODO: Update view matrix: modelMatrix = ... use translation -20 in Z and viewRotation
 
@@ -116,12 +112,12 @@ public:
     };
 };
 
-class OriginWindow : public Window {
+class OriginWindow : public ppgso::Window {
 private:
     Cube axisX, axisY, axisZ;
     Cube cube;
 
-    vec3 viewRotation{0,0,0};
+    glm::vec3 viewRotation{0,0,0};
 public:
     OriginWindow() : Window{"task5_3d_origin", SIZE, SIZE} {
 		
