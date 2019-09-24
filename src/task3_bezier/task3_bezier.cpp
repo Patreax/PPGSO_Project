@@ -65,7 +65,7 @@ private:
   }
 
 public:
-  BezierWindow() : Window{"task4_bezier", SIZE, SIZE} {
+  BezierWindow() : Window{"task3_bezier", SIZE, SIZE} {
     // Generate Bezier curve points
     bezierShape(15);
 

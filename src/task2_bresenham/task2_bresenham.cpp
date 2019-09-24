@@ -33,8 +33,8 @@ int main()
     drawLine(framebuffer, points[i], points[i+1]);
 
   // Save the result
-  std::cout << "Generating task3_bresenham.bmp file ..." << std::endl;
-  ppgso::image::saveBMP(framebuffer, "task3_bresenham.bmp");
+  std::cout << "Generating task2_bresenham.bmp file ..." << std::endl;
+  ppgso::image::saveBMP(framebuffer, "task2_bresenham.bmp");
 
   std::cout << "Done." << std::endl;
   return EXIT_SUCCESS;

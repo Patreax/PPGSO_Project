@@ -181,40 +181,40 @@ add_executable(playground src/playground/playground.cpp)
 target_link_libraries(playground ppgso shaders)
 install (TARGETS playground DESTINATION .)
 
-# Task1
+# task1_filter
 add_executable(task1_filter src/task1_filter/task1_filter.cpp)
-target_link_libraries(task1_filter ppgso)
-install (TARGETS task1_filter DESTINATION .)
+install(TARGETS task1_filter DESTINATION .)
 
-# Task2
-add_executable(task2_convolution src/task2_convolution/task2_convolution.cpp)
-target_link_libraries(task2_convolution ppgso)
-install (TARGETS task2_convolution DESTINATION .)
+# task2_bresenham
+add_executable(task2_bresenham src/task2_bresenham/task2_bresenham.cpp)
+target_link_libraries(task2_bresenham ppgso shaders)
+install(TARGETS task2_bresenham DESTINATION .)
 
-# Task3
-add_executable(task3_bresenham src/task3_bresenham/task3_bresenham.cpp)
-target_link_libraries(task3_bresenham ppgso)
-install (TARGETS task3_bresenham DESTINATION .)
+# task3_bezier
+add_executable(task3_bezier src/task3_bezier/task3_bezier.cpp)
+target_link_libraries(task3_bezier ppgso shaders)
+install(TARGETS task3_bezier DESTINATION .)
 
-# Task4
-add_executable(task4_bezier src/task4_bezier/task4_bezier.cpp)
-target_link_libraries(task4_bezier ppgso shaders)
-install (TARGETS task4_bezier DESTINATION .)
+# task4_2dshapes
+add_executable(task4_2dshapes src/task4_2dshapes/task4_2dshapes.cpp)
+target_link_libraries(task4_2dshapes ppgso shaders)
+install(TARGETS task4_2dshapes DESTINATION .)
 
-# Task5
-add_executable(task5_2dshapes src/task5_2dshapes/task5_2dshapes.cpp)
-target_link_libraries(task5_2dshapes ppgso shaders)
-install (TARGETS task5_2dshapes DESTINATION .)
+# task5_3d_origin
+add_executable(task5_3d_origin src/task5_3d_origin/task5_3d_origin.cpp)
+target_link_libraries(task5_3d_origin ppgso shaders)
+install(TARGETS task5_3d_origin DESTINATION .)
 
-# Task6
+# task6_bezier_surface
 add_executable(task6_bezier_surface src/task6_bezier_surface/task6_bezier_surface.cpp)
 target_link_libraries(task6_bezier_surface ppgso shaders)
-install (TARGETS task6_bezier_surface DESTINATION .)
+install(TARGETS task6_bezier_surface DESTINATION .)
 
-# Task7
+# task7_particles
 add_executable(task7_particles src/task7_particles/task7_particles.cpp)
 target_link_libraries(task7_particles ppgso shaders)
-install (TARGETS task7_particles DESTINATION .)
+install(TARGETS task7_particles DESTINATION .)
+
 
 #
 # INSTALLATION
