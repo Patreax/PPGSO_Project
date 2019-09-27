@@ -151,7 +151,7 @@ sudo apt-get install build-essential cmake libglew-dev libglfw3-dev libglm-dev
 On macOS install [Homebrew](http://brew.sh) package manager and install the dependencies using the following commands in terminal. Note that the installation of Homebrew expects __XCode__ to be installed, this can be simply downloaded from the app store.
 
 ```bash
-brew install cmake glm glfw glew
+brew install cmake glm glfw glew libomp
 ```
 
 You can also install CMake and use it to generate project files for your IDE of choice.
