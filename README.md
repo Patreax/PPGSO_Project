@@ -6,126 +6,6 @@ All examples are written in C++14 with simplicity in mind, performance optimizat
 
 To install the examples please see the [Installation instructions](#installation-instructions) section.
 
-## Software rendering examples
-Software rendering examples do not rely on any specialized hardware or libraries to produce graphical output. Most of these examples are generators that produce RAW or BMP images.
-
-### raw1_gradient - Color gradient RAW image generator
-
-![Output of the raw1_gradient example](doc/raw1_gradient.png)
-
-- Illustrates the concept of a framebuffer
-- Framebuffer memory management is manual
-- Simple loops are used to generate a color gradient image
-- The framebuffer is saved as a RAW 24bit rgb image
-- You can open the image using 2D manipulation software such as [Gimp](https://www.gimp.org)
-
-### raw2_raycast - RayCasting with Phong lighting and shadows
-
-![Output of the raw2_raycast example](doc/raw2_raycast.png)
-
-- Simple demonstration of basic ray casting
-- Rays are cast from camera space into the scene with multi-sampling
-- Collisions are computed with scene geometry and hits are generated
-- For each hit the example calculates Phong lighting with shadow term
-
-### raw3_raytrace - RayTracing with reflections and refractions
-
-![Output of the raw3_raytrace example](doc/raw3_raytrace.png)
-
-- Simple demonstration of RayTracing without any acceleration techniques
-- Casts rays from camera space into scene and recursively traces reflections/refractions
-- Materials are extended to support simple specular reflections and transparency with refraction index
-- A multi-core CPU is recommended to run the example
-
-### raw4_raster - Raster rendering with texturing
-
-![Output of the raw4_raster example](doc/raw4_raster.png)
-
-- Implements a very simple software raster rendering
-- Mimics parts of the OpenGL pipeline with vertex and fragment shaders
-- Some of the pipeline steps such as culling, clipping were skipped for simplicity and readability
-- Triangle rendering uses horizontal triangle splitting and filling is implemented using linear interpolation
-
-
-## OpenGL 3.3 examples
-The included OpenGL 3.3 examples will generate graphical output directly onto the screen using a window. Most of the examples rely on the included _ppgso_ library to provide simple abstraction classes such as ppgso::Window or ppgso::Texture. Students are expected to analyse these abstractions and extend them if needed.
-
-### [gl1_gradient](src/gl1_gradient/gl1_gradient.cpp) - Simple triangle with a color gradient
-
-![Screenshot of the gl1_gradient example](doc/gl1_gradient.png)
-
-- Recommended example to start with learning OpenGL
-- Simple application with direct OpenGL calls, only window handling is abstracted
-- Renders a triangle in the center of the screen with color gradinet between its corners
-
-### [gl2_texture](src/gl2_texture/gl2_texture.cpp) - Loading and rendering RAW texture
-
-![Screenshot of the gl2_texture example](doc/gl2_texture.png)
-
-- Demonstrates how to load raw texture data as input for a shader
-- The texture itself is loaded from raw RGB image file directly into OpenGL
-- Geometry loading is handled using the Mesh class that also handles loading of UV coordinates
-
-### [gl3_animate](src/gl3_animate/gl3_animate.cpp) - Dynamically generated 2D animation
-
-![Screenshot of the gl3_animate example](doc/gl3_animate.png)
-
-- Demonstrates the use of a dynamically generated texture content on the CPU
-- Displays the generated content as texture on a quad using OpenGL
-- Basic animation achieved by incrementing a parameter used in the image generation
-
-### [gl4_transform](src/gl4_transform/gl4_transform.cpp) - 2D transformations
-
-![Screenshot of the gl4_transform example](doc/gl4_transform.png)
-
-- This example demonstrates basic transformations
-- Example combines multiple matrices using multiplication
-- Press SPACE to see each transformation
-
-### [gl5_projection](src/gl5_projection/gl5_projection.cpp) - Parallel and perspective projections
-
-![Screenshot of the gl5_projection example](doc/gl5_projection.png)
-
-- Demonstrates the use of perspective and parallel projection
-- Geometry is rendered in 3D and thus can overlap
-- Useful for demonstrating culling and depth test concepts
-
-### [gl6_mesh](src/gl6_mesh/gl6_mesh.cpp) - Loading and rendering 3D models
-
-![Screenshot of the gl6_mesh example](doc/gl6_mesh.png)
-
-- Displays geometry that is loaded from Wavefront OBJ files encapsulated in a Mesh object
-- Implements object transformation based on mouse movement
-- Combines parallel and orthographic camera projection
-- SPACE stops/resumes the animation
-
-### [gl7_diffuse](src/gl7_diffuse/gl7_diffuse.cpp) - Directional light with diffuse lighting
-
-![Screenshot of the gl7_diffuse example](doc/gl7_diffuse.png)
-
-- Demonstration of simple diffuse lighting with one directional light source
-- The light direction can be randomised by pressing SPACE
-
-### [gl8_framebuffer](src/gl8_framebuffer/gl8_framebuffer.cpp) - Two pass rendering with a convolution filter
-
-![Screenshot of the gl8_framebuffer example](doc/gl8_framebuffer.png)
-
-- Demonstrates use of Framebuffer Object (FBO)
-- Renders a scene to a texture in graphics memory
-- The resulting texture is used in the final scene displayed on screen with a convolution filter applied
-
-### [gl9_scene](src/gl9_scene/gl9_scene.cpp) - Game with interactive scene
-
-![Screenshot of the gl9_scene example](doc/gl9_scene.png)
-
-- Introduces the concept of a dynamic scene of objects
-- Uses abstract object interface for _Update_ and _Render_ steps
-- Creates a simple game scene with Player, Asteroid and Space objects
-- Some objects use shared resources and all object deallocations are handled automatically
-- Controls: LEFT, RIGHT, "R" to reset, "P" to pause, SPACE to fire
-
-## Task templates for courses
-
 
 ## Installation instructions
 
@@ -230,3 +110,122 @@ Try to install `mesa-common-dev`, `libgl1-mesa-dev` and `libglu1-mesa-dev`
 - GLFW [official documentation](http://www.glfw.org/docs/latest/) and [guide](http://www.glfw.org/docs/latest/quick.html)
 - GLEW [use guide](http://glew.sourceforge.net/basic.htm)
 - CMake [basic use](https://cmake.org/runningcmake/) and [tutorial](https://cmake.org/cmake-tutorial/)
+
+
+## OpenGL 3.3 examples
+The included OpenGL 3.3 examples will generate graphical output directly onto the screen using a window. Most of the examples rely on the included _ppgso_ library to provide simple abstraction classes such as ppgso::Window or ppgso::Texture. Students are expected to analyse these abstractions and extend them if needed.
+
+### [gl1_gradient](src/gl1_gradient/gl1_gradient.cpp) - Simple triangle with a color gradient
+
+![Screenshot of the gl1_gradient example](doc/gl1_gradient.png)
+
+- Recommended example to start with learning OpenGL
+- Simple application with direct OpenGL calls, only window handling is abstracted
+- Renders a triangle in the center of the screen with color gradinet between its corners
+
+### [gl2_texture](src/gl2_texture/gl2_texture.cpp) - Loading and rendering RAW texture
+
+![Screenshot of the gl2_texture example](doc/gl2_texture.png)
+
+- Demonstrates how to load raw texture data as input for a shader
+- The texture itself is loaded from raw RGB image file directly into OpenGL
+- Geometry loading is handled using the Mesh class that also handles loading of UV coordinates
+
+### [gl3_animate](src/gl3_animate/gl3_animate.cpp) - Dynamically generated 2D animation
+
+![Screenshot of the gl3_animate example](doc/gl3_animate.png)
+
+- Demonstrates the use of a dynamically generated texture content on the CPU
+- Displays the generated content as texture on a quad using OpenGL
+- Basic animation achieved by incrementing a parameter used in the image generation
+
+### [gl4_transform](src/gl4_transform/gl4_transform.cpp) - 2D transformations
+
+![Screenshot of the gl4_transform example](doc/gl4_transform.png)
+
+- This example demonstrates basic transformations
+- Example combines multiple matrices using multiplication
+- Press SPACE to see each transformation
+
+### [gl5_projection](src/gl5_projection/gl5_projection.cpp) - Parallel and perspective projections
+
+![Screenshot of the gl5_projection example](doc/gl5_projection.png)
+
+- Demonstrates the use of perspective and parallel projection
+- Geometry is rendered in 3D and thus can overlap
+- Useful for demonstrating culling and depth test concepts
+
+### [gl6_mesh](src/gl6_mesh/gl6_mesh.cpp) - Loading and rendering 3D models
+
+![Screenshot of the gl6_mesh example](doc/gl6_mesh.png)
+
+- Displays geometry that is loaded from Wavefront OBJ files encapsulated in a Mesh object
+- Implements object transformation based on mouse movement
+- Combines parallel and orthographic camera projection
+- SPACE stops/resumes the animation
+
+### [gl7_diffuse](src/gl7_diffuse/gl7_diffuse.cpp) - Directional light with diffuse lighting
+
+![Screenshot of the gl7_diffuse example](doc/gl7_diffuse.png)
+
+- Demonstration of simple diffuse lighting with one directional light source
+- The light direction can be randomised by pressing SPACE
+
+### [gl8_framebuffer](src/gl8_framebuffer/gl8_framebuffer.cpp) - Two pass rendering with a convolution filter
+
+![Screenshot of the gl8_framebuffer example](doc/gl8_framebuffer.png)
+
+- Demonstrates use of Framebuffer Object (FBO)
+- Renders a scene to a texture in graphics memory
+- The resulting texture is used in the final scene displayed on screen with a convolution filter applied
+
+### [gl9_scene](src/gl9_scene/gl9_scene.cpp) - Game with interactive scene
+
+![Screenshot of the gl9_scene example](doc/gl9_scene.png)
+
+- Introduces the concept of a dynamic scene of objects
+- Uses abstract object interface for _Update_ and _Render_ steps
+- Creates a simple game scene with Player, Asteroid and Space objects
+- Some objects use shared resources and all object deallocations are handled automatically
+- Controls: LEFT, RIGHT, "R" to reset, "P" to pause, SPACE to fire
+
+## Software rendering examples
+Software rendering examples do not rely on any specialized hardware or libraries to produce graphical output. Most of these examples are generators that produce RAW or BMP images.
+
+### raw1_gradient - Color gradient RAW image generator
+
+![Output of the raw1_gradient example](doc/raw1_gradient.png)
+
+- Illustrates the concept of a framebuffer
+- Framebuffer memory management is manual
+- Simple loops are used to generate a color gradient image
+- The framebuffer is saved as a RAW 24bit rgb image
+- You can open the image using 2D manipulation software such as [Gimp](https://www.gimp.org)
+
+### raw2_raycast - RayCasting with Phong lighting and shadows
+
+![Output of the raw2_raycast example](doc/raw2_raycast.png)
+
+- Simple demonstration of basic ray casting
+- Rays are cast from camera space into the scene with multi-sampling
+- Collisions are computed with scene geometry and hits are generated
+- For each hit the example calculates Phong lighting with shadow term
+
+### raw3_raytrace - RayTracing with reflections and refractions
+
+![Output of the raw3_raytrace example](doc/raw3_raytrace.png)
+
+- Simple demonstration of RayTracing without any acceleration techniques
+- Casts rays from camera space into scene and recursively traces reflections/refractions
+- Materials are extended to support simple specular reflections and transparency with refraction index
+- A multi-core CPU is recommended to run the example
+
+### raw4_raster - Raster rendering with texturing
+
+![Output of the raw4_raster example](doc/raw4_raster.png)
+
+- Implements a very simple software raster rendering
+- Mimics parts of the OpenGL pipeline with vertex and fragment shaders
+- Some of the pipeline steps such as culling, clipping were skipped for simplicity and readability
+- Triangle rendering uses horizontal triangle splitting and filling is implemented using linear interpolation
+
