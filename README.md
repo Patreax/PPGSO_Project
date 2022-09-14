@@ -12,8 +12,10 @@ To install the examples please see the [Installation instructions](#installation
 The recommended way to build and explore the examples is to use the [CLion IDE](https://www.jetbrains.com/clion/) which is available for macOS, Linux and Windows. It is free for 30days and you can register for a [FREE LICENSE](https://www.jetbrains.com/student/) using university mail.
 
 Depending on your system of choice you will need to install the following dependencies:
-* C++14 capable compiler
+* C++14 capable compiler - This is part of the CLion IDE installation (bundled MinGW compiler)
 * [CMake](https://cmake.org) build system - This is part of the CLion IDE installation
+---
+These are included in the repository - Windows only
 * [GLEW](http://glew.sourceforge.net) - The OpenGL Extension Wrangler Library for compatibility reasons
 * [GLFW3](http://www.glfw.org) - Platform-independent API for creating windows, reading input, handling events, etc.
 * [GLM](http://glm.g-truc.net) - C++ mathematics library for graphics software
@@ -39,9 +41,10 @@ You can also install CMake and use it to generate project files for your IDE of 
 ### Microsoft Windows dependencies
 On Microsoft Windows you may try to open the `CMakeLists.txt` file with the latest Visual Studio with CMake support. The samples should work as is, binaries for the above mentioned libraries are included as part of the repository.
 
-However the recommended way is to avoid Visual Studio and install [CLion IDE](https://www.jetbrains.com/clion/) and a __GCC__ based compiler:
-
-* Download and install [MinGW-w64](https://sourceforge.net/projects/mingw-w64/), this is the latest GCC compiler for Windows in a nice installer.
+However, the recommended way is to avoid Visual Studio and install [CLion IDE](https://www.jetbrains.com/clion/) and a __GCC__ based compiler:
+If you wish to proceed with VS Code or Visual Studio follow these instructions: 
+* VS-Code Download and install [MinGW-w64](https://sourceforge.net/projects/mingw-w64/), this is the latest GCC compiler for Windows in a nice installer.
+    * Visual Studio has its own compiler
 * Make sure to install the __64bit version (select x86_64, NOT i686)__, you need to manually switch this in the installer process. 
 * To avoid issues with malformed paths also edit the installation destination to C:/mingw-w64 instead of Program Files.
 * Run CLion and select MinGW as the __toolchain__ when prompted (default is C:/mingw-w64/..)
