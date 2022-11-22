@@ -84,7 +84,7 @@
 #define GLM_COMPILER_INTEL15		0x00100050
 #define GLM_COMPILER_INTEL16		0x00100060
 
-// Visual C++ defines
+// Visual c++ defines
 #define GLM_COMPILER_VC				0x01000000
 #define GLM_COMPILER_VC2010			0x01000090
 #define GLM_COMPILER_VC2012			0x010000A0
@@ -139,7 +139,7 @@
 #define GLM_MODEL_32				0x00000010
 #define GLM_MODEL_64				0x00000020
 
-// Force generic C++ compiler
+// Force generic c++ compiler
 #ifdef GLM_FORCE_COMPILER_UNKNOWN
 #	define GLM_COMPILER GLM_COMPILER_UNKNOWN
 
@@ -215,10 +215,10 @@
 #		endif
 #	endif
 
-// Visual C++
+// Visual c++
 #elif defined(_MSC_VER)
 #	if _MSC_VER < 1600
-#		error "GLM requires Visual C++ 2010 or higher"
+#		error "GLM requires Visual c++ 2010 or higher"
 #	elif _MSC_VER == 1600
 #		define GLM_COMPILER GLM_COMPILER_VC2010
 #	elif _MSC_VER == 1700

@@ -224,6 +224,19 @@ add_executable(playground src/playground/playground.cpp)
 target_link_libraries(playground ppgso shaders)
 install (TARGETS playground DESTINATION .)
 add_custom_command(TARGET playground POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
+
+# project
+add_executable(main
+        src/project/c++/main.cpp
+        src/project/c++/object.cpp
+        src/project/c++/scene.cpp
+        src/project/c++/camera.cpp
+        src/project/c++/castle.h src/project/c++/castle.cpp)
+target_link_libraries(main ppgso shaders)
+install (TARGETS main DESTINATION .)
+add_custom_command(TARGET main POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
+
+
 #
 # INSTALLATION
 #

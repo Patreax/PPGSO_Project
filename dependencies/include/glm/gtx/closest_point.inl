@@ -15,7 +15,7 @@ namespace glm
 		tvec3<T, P> Vector = point - a;
 		tvec3<T, P> LineDirection = (b - a) / LineLength;
 
-		// Project Vector to LineDirection to get the distance of point from a
+		// project Vector to LineDirection to get the distance of point from a
 		T Distance = dot(Vector, LineDirection);
 
 		if(Distance <= T(0)) return a;
@@ -35,7 +35,7 @@ namespace glm
 		tvec2<T, P> Vector = point - a;
 		tvec2<T, P> LineDirection = (b - a) / LineLength;
 
-		// Project Vector to LineDirection to get the distance of point from a
+		// project Vector to LineDirection to get the distance of point from a
 		T Distance = dot(Vector, LineDirection);
 
 		if(Distance <= T(0)) return a;

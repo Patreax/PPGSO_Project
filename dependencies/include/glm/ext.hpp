@@ -4,7 +4,7 @@
 /// 
 /// @defgroup gtc GTC Extensions (Stable)
 ///
-/// @brief Functions and types that the GLSL specification doesn't define, but useful to have for a C++ program.
+/// @brief Functions and types that the GLSL specification doesn't define, but useful to have for a c++ program.
 /// 
 /// GTC extensions aim to be stable. 
 /// 
@@ -14,7 +14,7 @@
 /// @defgroup gtx GTX Extensions (Experimental)
 /// 
 /// @brief Functions and types that the GLSL specification doesn't define, but 
-/// useful to have for a C++ program.
+/// useful to have for a c++ program.
 /// 
 /// Experimental extensions are useful functions and types, but the development of
 /// their API and functionality is not necessarily stable. They can change 

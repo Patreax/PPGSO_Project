@@ -65,7 +65,7 @@ public:
     glm::vec4 worldCoordinates = modelMatrix * vertex.position;
     // Transform the position to camera coordinates
     glm::vec4 cameraCoordinates = viewMatrix * worldCoordinates;
-    // Project the camera coordinates to screen coordinates
+    // project the camera coordinates to screen coordinates
     glm::vec4 screenCoordinates = projectionMatrix * cameraCoordinates;
     // Multiply normal with modelMatrix so that normals are always in world coordinates.
     // Pass on color and texture coordinates unchanged.

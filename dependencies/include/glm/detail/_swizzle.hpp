@@ -158,7 +158,7 @@ namespace detail
 	};
 
 //
-// To prevent the C++ syntax from getting entirely overwhelming, define some alias macros
+// To prevent the c++ syntax from getting entirely overwhelming, define some alias macros
 //
 #define _GLM_SWIZZLE_TEMPLATE1   template <int N, typename T, precision P, template <typename, precision> class vecType, int E0, int E1, int E2, int E3>
 #define _GLM_SWIZZLE_TEMPLATE2   template <int N, typename T, precision P, template <typename, precision> class vecType, int E0, int E1, int E2, int E3, int F0, int F1, int F2, int F3>

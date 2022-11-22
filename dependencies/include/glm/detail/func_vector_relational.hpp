@@ -96,7 +96,7 @@ namespace glm
 	GLM_FUNC_DECL bool all(vecType<bool, P> const & v);
 
 	/// Returns the component-wise logical complement of x.
-	/// /!\ Because of language incompatibilities between C++ and GLSL, GLM defines the function not but not_ instead.
+	/// /!\ Because of language incompatibilities between c++ and GLSL, GLM defines the function not but not_ instead.
 	///
 	/// @tparam vecType Boolean vector types.
 	///

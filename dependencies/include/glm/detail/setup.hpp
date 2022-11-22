@@ -49,7 +49,7 @@
 #	if GLM_COMPILER & GLM_COMPILER_CUDA
 #		pragma message("GLM: CUDA compiler detected")
 #	elif GLM_COMPILER & GLM_COMPILER_VC
-#		pragma message("GLM: Visual C++ compiler detected")
+#		pragma message("GLM: Visual c++ compiler detected")
 #	elif GLM_COMPILER & GLM_COMPILER_CLANG
 #		pragma message("GLM: Clang compiler detected")
 #	elif GLM_COMPILER & GLM_COMPILER_INTEL
@@ -117,7 +117,7 @@
 #endif//GLM_MESSAGES
 
 ///////////////////////////////////////////////////////////////////////////////////
-// C++ Version
+// c++ Version
 
 // User defines: GLM_FORCE_CXX98, GLM_FORCE_CXX03, GLM_FORCE_CXX11, GLM_FORCE_CXX14
 
@@ -270,7 +270,7 @@
 #	elif GLM_LANG & GLM_LANG_CXX98_FLAG
 #		pragma message("GLM: C++98")
 #	else
-#		pragma message("GLM: C++ language undetected")
+#		pragma message("GLM: c++ language undetected")
 #	endif//GLM_LANG
 
 #	if GLM_LANG & (GLM_LANG_CXXGNU_FLAG | GLM_LANG_CXXMS_FLAG)
@@ -279,7 +279,7 @@
 #endif//GLM_MESSAGES
 
 ///////////////////////////////////////////////////////////////////////////////////
-// Has of C++ features
+// Has of c++ features
 
 // http://clang.llvm.org/cxx_status.html
 // http://gcc.gnu.org/projects/cxx0x.html

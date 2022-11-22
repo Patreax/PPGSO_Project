@@ -5,10 +5,10 @@
 ///
 /// @brief The core of GLM, which implements exactly and only the GLSL specification to the degree possible.
 ///
-/// The GLM core consists of @ref core_types "C++ types that mirror GLSL types" and
-/// C++ functions that mirror the GLSL functions. It also includes 
+/// The GLM core consists of @ref core_types "c++ types that mirror GLSL types" and
+/// c++ functions that mirror the GLSL functions. It also includes
 /// @ref core_precision "a set of precision-based types" that can be used in the appropriate
-/// functions. The C++ types are all based on a basic set of @ref core_template "template types".
+/// functions. The c++ types are all based on a basic set of @ref core_template "template types".
 ///
 /// The best documentation for GLM Core is the current GLSL specification,
 /// <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.clean.pdf">version 4.2
@@ -33,7 +33,7 @@
 /// In OpenGL's GLSL, these precision qualifiers have no effect; they are there for compatibility
 /// with OpenGL ES's precision qualifiers, where they @em do have an effect.
 ///
-/// C++ has no language equivalent to precision qualifiers. So GLM provides the next-best thing:
+/// c++ has no language equivalent to precision qualifiers. So GLM provides the next-best thing:
 /// a number of typedefs of the @ref core_template that use a particular precision.
 ///
 /// None of these types make any guarantees about the actual precision used.
