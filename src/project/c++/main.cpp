@@ -6,6 +6,12 @@
 #include "camera.h"
 #include "scene.h"
 #include "castle.h"
+#include "castleGate.h"
+#include "castleWall.h"
+#include "castleTowerBase.h"
+#include "castleTowerTop.h"
+#include "clock.h"
+#include "hourHand.h"
 
 const unsigned int SIZE = 512;
 
@@ -26,12 +32,53 @@ private:
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
         camera->position.z = -55.0f;
-        scene.camera = std::move(camera);
 
-        auto castle = std::make_unique<Castle>();
-        castle->position.y = -6;
-        castle->rotation.x = -45;
-        scene.objects.push_back(std::move(castle));
+        // Gate
+        auto castleGate = std::make_unique<CastleGate>();
+        castleGate->position = {0, -6, 0};
+
+        // Wall
+        auto castleWallLeft = std::make_unique<CastleWall>();
+        castleWallLeft->position = castleGate->position + glm::vec3{25, 0, 25};
+        castleWallLeft->rotation = {0, 0, 1.6f};
+
+        auto castleWallRight = std::make_unique<CastleWall>();
+        castleWallRight->position = castleGate->position + glm::vec3{-25, 0, 25};
+        castleWallRight->rotation = {0, 0, 1.6f};
+
+        // towerBase
+        auto castleTowerBase = std::make_unique<CastleTowerBase>();
+        castleTowerBase->position = castleGate->position + glm::vec3{-30, -1, 0};
+
+        auto castleTowerBase1 = std::make_unique<CastleTowerBase>();
+        castleTowerBase1->position = castleGate->position + glm::vec3{30, -1, 0};
+        auto castleTowerTop1 = std::make_unique<CastleTowerTop>();
+        castleTowerTop1->position = castleTowerBase1->position + glm::vec3{0, 13, 0};
+
+        // towerTop
+        auto castleTowerTop = std::make_unique<CastleTowerTop>();
+        castleTowerTop->position = castleTowerBase->position + glm::vec3{0, 13, 0};
+
+        // clock
+        auto clock = std::make_unique<Clock>();
+        clock->position = {0, 0, -15};
+        clock->scale = {0.1f, 0.1f, 0.1f};
+        clock->rotation = {0, 0, 1.6f*2};
+        auto hourHand = std::make_unique<HourHand>();
+        hourHand->position = clock->position + glm::vec3{0, 3, -2};
+        hourHand->scale = {0.1f, 5, 0.1f};
+
+        scene.objects.push_back(std::move(castleGate));
+        scene.objects.push_back(std::move(castleWallLeft));
+        scene.objects.push_back(std::move(castleWallRight));
+        scene.objects.push_back(std::move(castleTowerBase));
+        scene.objects.push_back(std::move(castleTowerTop));
+        scene.objects.push_back(std::move(castleTowerBase1));
+        scene.objects.push_back(std::move(castleTowerTop1));
+        scene.objects.push_back(std::move(clock));
+        scene.objects.push_back(std::move(hourHand));
+
+        scene.camera = std::move(camera);
     }
 
 public:

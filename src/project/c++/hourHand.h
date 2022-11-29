@@ -3,14 +3,16 @@
 
 #include "object.h"
 
-class Castle final : public Object {
+class HourHand final : public Object {
 private:
     static std::unique_ptr<ppgso::Mesh> mesh;
     static std::unique_ptr<ppgso::Shader> shader;
     static std::unique_ptr<ppgso::Texture> texture;
 
+    float time = 0;
+
 public:
-    Castle();
+    HourHand();
 
     bool update(Scene &scene, float dt) override;
 

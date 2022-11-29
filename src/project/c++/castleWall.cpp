@@ -1,25 +1,25 @@
-#include "castle.h"
+#include "castleWall.h"
 #include "scene.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 
-std::unique_ptr<ppgso::Mesh> Castle::mesh;
-std::unique_ptr<ppgso::Shader> Castle::shader;
-std::unique_ptr<ppgso::Texture> Castle::texture;
+std::unique_ptr<ppgso::Mesh> CastleWall::mesh;
+std::unique_ptr<ppgso::Shader> CastleWall::shader;
+std::unique_ptr<ppgso::Texture> CastleWall::texture;
 
-Castle::Castle() {
+CastleWall::CastleWall() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("stone.bmp"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("castleGate.obj");
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("castleWall.obj");
 }
 
-bool Castle::update(Scene &scene, float dt) {
+bool CastleWall::update(Scene &scene, float dt) {
     generateModelMatrix();
     return true;
 }
 
-void Castle::render(Scene &scene) {
+void CastleWall::render(Scene &scene) {
     shader->use();
 
     shader->setUniform("LightDirection", scene.lightDirection);

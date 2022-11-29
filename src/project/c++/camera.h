@@ -19,6 +19,15 @@ public:
   glm::vec3 back{0,0,-1};
 
   glm::vec3 direction{0,0,0};
+  glm::vec3 cameraFront{0,0,-1};
+
+  float yaw = -90.0f;
+  float pitch = 0.0f;
+  float fov = 45.0f;
+
+  bool firstMouse = true;
+  float lastX = 960.0f;
+  float lastY = 540.0f;
 
   glm::mat4 modelMatrix;
   glm::mat4 viewMatrix;
@@ -37,7 +46,7 @@ public:
   /*!
    * Update Camera viewMatrix based on up, position and back vectors
    */
-  void update(Scene &scene);
+  void update(Scene &scene, float dt);
 
   /*!
    * Get direction vector in world coordinates through camera projection plane
@@ -47,7 +56,7 @@ public:
    */
   glm::vec3 cast(double u, double v);
 
-  void move(Scene &scene);
+  void move(Scene &scene, float dt, float xpos, float ypos);
   void rotate(Scene &scene);
 };
 
