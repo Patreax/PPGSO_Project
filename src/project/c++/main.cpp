@@ -38,26 +38,46 @@ private:
         castleGate->position = {0, -6, 0};
 
         // Wall
-        auto castleWallLeft = std::make_unique<CastleWall>();
-        castleWallLeft->position = castleGate->position + glm::vec3{25, 0, 25};
-        castleWallLeft->rotation = {0, 0, 1.6f};
+        auto castleWallLeftFront = std::make_unique<CastleWall>();
+        castleWallLeftFront->position = castleGate->position + glm::vec3{25, 0, 25};
+        castleWallLeftFront->rotation = {0, 0, 1.6f};
 
-        auto castleWallRight = std::make_unique<CastleWall>();
-        castleWallRight->position = castleGate->position + glm::vec3{-25, 0, 25};
-        castleWallRight->rotation = {0, 0, 1.6f};
+        auto castleWallRightFront = std::make_unique<CastleWall>();
+        castleWallRightFront->position = castleGate->position + glm::vec3{-25, 0, 25};
+        castleWallRightFront->rotation = {0, 0, 1.6f};
 
         // towerBase
-        auto castleTowerBase = std::make_unique<CastleTowerBase>();
-        castleTowerBase->position = castleGate->position + glm::vec3{-30, -1, 0};
-
-        auto castleTowerBase1 = std::make_unique<CastleTowerBase>();
-        castleTowerBase1->position = castleGate->position + glm::vec3{30, -1, 0};
-        auto castleTowerTop1 = std::make_unique<CastleTowerTop>();
-        castleTowerTop1->position = castleTowerBase1->position + glm::vec3{0, 13, 0};
-
+        auto castleTowerBaseLeftFront = std::make_unique<CastleTowerBase>();
+        castleTowerBaseLeftFront->position = castleGate->position + glm::vec3{-30, -1, 0};
         // towerTop
-        auto castleTowerTop = std::make_unique<CastleTowerTop>();
-        castleTowerTop->position = castleTowerBase->position + glm::vec3{0, 13, 0};
+        auto castleTowerTopLeftFront = std::make_unique<CastleTowerTop>();
+        castleTowerTopLeftFront->position = castleTowerBaseLeftFront->position + glm::vec3{0, 13, 0};
+
+        auto castleTowerBaseRightFront = std::make_unique<CastleTowerBase>();
+        castleTowerBaseRightFront->position = castleGate->position + glm::vec3{30, -1, 0};
+        auto castleTowerTopRightFront = std::make_unique<CastleTowerTop>();
+        castleTowerTopRightFront->position = castleTowerBaseRightFront->position + glm::vec3{0, 13, 0};
+
+        auto castleWallLeftBack = std::make_unique<CastleWall>();
+        castleWallLeftBack->position = castleGate->position + glm::vec3{25, 0, 65};
+        castleWallLeftBack->rotation = {0, 0, 1.6f};
+
+        auto castleWallRightBack = std::make_unique<CastleWall>();
+        castleWallRightBack->position = castleGate->position + glm::vec3{-25, 0, 65};
+        castleWallRightBack->rotation = {0, 0, ppgso::PI / 2};
+
+        auto castleWallBack = std::make_unique<CastleWall>();
+        castleWallBack->position = castleGate->position + glm::vec3{0,0, 100};
+
+        // back towers
+        auto castleTowerBaseLeftBack = std::make_unique<CastleTowerBase>();
+        castleTowerBaseLeftBack->position = castleGate->position + glm::vec3{-25, -1, 95};
+        auto castleTowerTopLeftBack = std::make_unique<CastleTowerTop>();
+        castleTowerTopLeftBack->position = castleTowerBaseLeftBack->position + glm::vec3{0, 13, 0};
+        auto castleTowerBaseRightBack = std::make_unique<CastleTowerBase>();
+        castleTowerBaseRightBack->position = castleGate->position + glm::vec3{25, -1, 95};
+        auto castleTowerTopRightBack = std::make_unique<CastleTowerTop>();
+        castleTowerTopRightBack->position = castleTowerBaseLeftBack->position + glm::vec3{0, 13, 0};
 
         // clock
         auto clock = std::make_unique<Clock>();
@@ -69,12 +89,23 @@ private:
         hourHand->scale = {0.1f, 5, 0.1f};
 
         scene.objects.push_back(std::move(castleGate));
-        scene.objects.push_back(std::move(castleWallLeft));
-        scene.objects.push_back(std::move(castleWallRight));
-        scene.objects.push_back(std::move(castleTowerBase));
-        scene.objects.push_back(std::move(castleTowerTop));
-        scene.objects.push_back(std::move(castleTowerBase1));
-        scene.objects.push_back(std::move(castleTowerTop1));
+        scene.objects.push_back(std::move(castleWallLeftFront));
+        scene.objects.push_back(std::move(castleWallRightFront));
+        scene.objects.push_back(std::move(castleTowerBaseLeftFront));
+        scene.objects.push_back(std::move(castleTowerTopLeftFront));
+        scene.objects.push_back(std::move(castleTowerBaseRightFront));
+        scene.objects.push_back(std::move(castleTowerTopRightFront));
+
+        scene.objects.push_back(std::move(castleWallLeftBack));
+        scene.objects.push_back(std::move(castleWallRightBack));
+
+        scene.objects.push_back(std::move(castleWallBack));
+
+        scene.objects.push_back(std::move(castleTowerBaseLeftBack));
+        scene.objects.push_back(std::move(castleTowerBaseRightBack));
+        scene.objects.push_back(std::move(castleTowerTopLeftBack));
+        scene.objects.push_back(std::move(castleTowerTopRightBack));
+
         scene.objects.push_back(std::move(clock));
         scene.objects.push_back(std::move(hourHand));
 

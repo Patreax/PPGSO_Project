@@ -18,9 +18,7 @@ bool HourHand::update(Scene &scene, float dt) {
 
     time += dt;
 
-
     rotation = {0, sin(time), 0};
-
 
     generateModelMatrix();
     return true;
