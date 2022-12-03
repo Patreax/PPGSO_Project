@@ -97,12 +97,18 @@ private:
 
 public:
 
+    float rad(float degree){
+        return degree * (ppgso::PI / 180);
+    }
+
     /*!
      * Construct custom game window
      */
     SceneWindow() : Window{"demo", WIDTH, HEIGHT} {
         //hideCursor();
         glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
         // Initialize OpenGL state
         // Enable Z-buffer
@@ -115,6 +121,11 @@ public:
         glCullFace(GL_BACK);
 
         initScene();
+        //Center cursor
+        glfwSetCursorPos(window ,1920 / 2, 1080 / 2);
+        scene.camera->firstMouse = true;
+        onCursorPos(1920 / 2, 1080 / 2);
+
     }
 
     void onKey(int key, int scanCode, int action, int mods) override {

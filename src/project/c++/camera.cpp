@@ -54,7 +54,7 @@ void Camera::move(Scene &scene, float dt, float xpos, float ypos) {
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.3f;
+    float sensitivity = 0.2f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
@@ -80,6 +80,12 @@ void Camera::move(Scene &scene, float dt, float xpos, float ypos) {
 
     if (scene.keyboard[GLFW_KEY_LEFT_SHIFT]){
         speed *= 4;
+
+    }
+
+    if (scene.keyboard[GLFW_KEY_P]) {
+        std::cout << "x:" << position.x << " y:" << position.y << " z:" <<position.z;
+        std::cout << " yaw: " << yaw << " pitch:" << pitch << "\n";
     }
 
     if (scene.keyboard[GLFW_KEY_W]) {
@@ -93,6 +99,12 @@ void Camera::move(Scene &scene, float dt, float xpos, float ypos) {
     }
     if (scene.keyboard[GLFW_KEY_D]) {
         position += speed * glm::normalize(glm::cross(cameraFront, up));;
+    }
+    if (scene.keyboard[GLFW_KEY_SPACE]) {
+        position += speed * up;
+    }
+    if (scene.keyboard[GLFW_KEY_LEFT_CONTROL]) {
+        position -= speed * up;
     }
 
     // TODO void onCursorPos(double cursorX, double cursorY) override na aktulanu poziciu mysi
