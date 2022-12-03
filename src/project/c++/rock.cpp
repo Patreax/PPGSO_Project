@@ -14,8 +14,8 @@ std::unique_ptr<ppgso::Texture> Rock::texture;
 
 Rock::Rock() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("stone.bmp"));
-    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("riverRock.obj");
+    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("rock.bmp"));
+    if (!mesh) mesh = std::make_unique<ppgso::Mesh>("rock.obj");
 }
 
 bool Rock::update(Scene &scene, float dt) {

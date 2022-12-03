@@ -48,8 +48,8 @@ private:
         castleWallRightFront->rotation = {0, 0, 1.6f};
 
         //Rock
-        auto rock1 = std::make_unique<Rock>();
-        rock1->scale = {0.1f, .1f, .1f};
+        //auto rock1 = std::make_unique<Rock>();
+        //rock1->scale = {0.1f, .1f, .1f};
 
 
         // towerBase
@@ -85,7 +85,7 @@ private:
         scene.objects.push_back(std::move(castleTowerTopLeftFront));
         scene.objects.push_back(std::move(castleTowerBaseRightFront));
         scene.objects.push_back(std::move(castleTowerTopRightFront));
-        scene.objects.push_back(std::move(rock1));
+        //scene.objects.push_back(std::move(rock1));
 
         scene.objects.push_back(std::move(castleWallLeftBack));
 
