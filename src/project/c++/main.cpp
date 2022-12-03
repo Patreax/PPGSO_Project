@@ -12,6 +12,7 @@
 #include "castleTowerTop.h"
 #include "clock.h"
 #include "hourHand.h"
+#include "rock.h"
 
 const unsigned int SIZE = 512;
 
@@ -46,6 +47,11 @@ private:
         castleWallRightFront->position = castleGate->position + glm::vec3{-25, 0, 25};
         castleWallRightFront->rotation = {0, 0, 1.6f};
 
+        //Rock
+        auto rock1 = std::make_unique<Rock>();
+        rock1->scale = {0.1f, .1f, .1f};
+
+
         // towerBase
         auto castleTowerBaseLeftFront = std::make_unique<CastleTowerBase>();
         castleTowerBaseLeftFront->position = castleGate->position + glm::vec3{-30, -1, 0};
@@ -79,6 +85,7 @@ private:
         scene.objects.push_back(std::move(castleTowerTopLeftFront));
         scene.objects.push_back(std::move(castleTowerBaseRightFront));
         scene.objects.push_back(std::move(castleTowerTopRightFront));
+        scene.objects.push_back(std::move(rock1));
 
         scene.objects.push_back(std::move(castleWallLeftBack));
 
