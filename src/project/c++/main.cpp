@@ -16,6 +16,7 @@
 #include "ground.h"
 #include "random"
 #include "tree.h"
+#include "water.h"
 
 const unsigned int SIZE = 512;
 
@@ -38,6 +39,18 @@ private:
                 ground->rotation = rotation;
                 ground->position = {i,y,j};
                 scene.objects.push_back(std::move(ground));
+            }
+        }
+    }
+
+    void addWater(int x1,int x2,int z1,int z2,int y){
+        for(int i = x1; i < x2; i += 10){
+            for(int j = z1; j < z2; j += 10){
+                auto water = std::make_unique<Water>();
+                water->scale = {2,2,2,};
+                water->rotation = glm::vec3 {0,0,0};
+                water->position = {i,y,j};
+                scene.objects.push_front(std::move(water));
             }
         }
     }
@@ -85,6 +98,9 @@ private:
         addGround(-100, 100, -28.68, -20, -19.96, glm::vec3{rad(-45),0,0});
         addGround(-100, 100, -42, -35, -19.96, glm::vec3{rad(45),0,0});
         addGround(-100, 100, -35, -30, -23, glm::vec3{0,0,0});
+
+        // Water
+        addWater(-100, 100, -40, -25, -18);
 
         // towerBase
         auto castleTowerBaseLeftFront = std::make_unique<CastleTowerBase>();

@@ -239,7 +239,7 @@ add_executable(main
         src/project/c++/clock.h src/project/c++/clock.cpp
         src/project/c++/hourHand.h src/project/c++/hourHand.cpp
         src/project/c++/rock.cpp src/project/c++/rock.h
-        src/project/c++/ground.cpp src/project/c++/ground.h src/project/c++/tree.cpp src/project/c++/tree.h)
+        src/project/c++/ground.cpp src/project/c++/ground.h src/project/c++/tree.cpp src/project/c++/tree.h src/project/c++/water.cpp src/project/c++/water.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 add_custom_command(TARGET main POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})
