@@ -13,6 +13,9 @@
 #include "clock.h"
 #include "hourHand.h"
 #include "rock.h"
+#include "ground.h"
+#include "random"
+#include "tree.h"
 
 const unsigned int SIZE = 512;
 
@@ -27,11 +30,23 @@ private:
      * Reset and initialize the game scene
      * Creating unique smart pointers to objects that are stored in the scene object list
      */
+    void addGround(int x1,int x2,int z1,int z2,int y,glm::vec3 rotation){
+        for(int i = x1; i < x2; i += 10){
+            for(int j = z1; j < z2; j += 10){
+                auto ground = std::make_unique<Ground>();
+                ground->scale = {2,2,2,};
+                ground->rotation = rotation;
+                ground->position = {i,y,j};
+                scene.objects.push_back(std::move(ground));
+            }
+        }
+    }
+
     void initScene() {
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 100.0f);
+        auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         camera->position.z = -55.0f;
 
         // Gate
@@ -47,10 +62,29 @@ private:
         castleWallRightFront->position = castleGate->position + glm::vec3{-25, 0, 25};
         castleWallRightFront->rotation = {0, 0, 1.6f};
 
-        //Rock
-        //auto rock1 = std::make_unique<Rock>();
-        //rock1->scale = {0.1f, .1f, .1f};
+        // Rocks
 
+        for(int i = 1; i < 20; i++){
+            auto rock = std::make_unique<Rock>();
+            rock->position = {-(double)rand()/(double)RAND_MAX * 44.0f - 35.0f,-13.5,(float)rand()/(double)RAND_MAX * 120.0f -20.0f};
+
+            scene.objects.push_back(std::move(rock));
+        }
+
+        // Trees
+        for(int i = 1; i < 20; i++){
+            auto tree = std::make_unique<Tree>();
+            tree->position = {-(double)rand()/(double)RAND_MAX * 44.0f -35.0f,-13.5,(float)rand()/(double)RAND_MAX * 120.0f -20.0f};
+
+            scene.objects.push_back(std::move(tree));
+        }
+
+        //Ground
+        addGround(-100, 100, -20, 150, -16, glm::vec3{0,0,0});
+        addGround(-100, 100, -80, -40, -16, glm::vec3{0,0,0});
+        addGround(-100, 100, -28.68, -20, -19.96, glm::vec3{rad(-45),0,0});
+        addGround(-100, 100, -42, -35, -19.96, glm::vec3{rad(45),0,0});
+        addGround(-100, 100, -35, -30, -23, glm::vec3{0,0,0});
 
         // towerBase
         auto castleTowerBaseLeftFront = std::make_unique<CastleTowerBase>();
@@ -68,7 +102,6 @@ private:
         castleWallLeftBack->position = castleGate->position + glm::vec3{25, 0, 60};
         castleWallLeftBack->rotation = {0, 0, 1.6f};
 
-
         // clock
         auto clock = std::make_unique<Clock>();
         clock->position = {0, 0, -15};
@@ -78,6 +111,7 @@ private:
         hourHand->position = clock->position + glm::vec3{0, 3, -2};
         hourHand->scale = {0.1f, 5, 0.1f};
 
+        // Castle
         scene.objects.push_back(std::move(castleGate));
         scene.objects.push_back(std::move(castleWallLeftFront));
         scene.objects.push_back(std::move(castleWallRightFront));
@@ -85,10 +119,9 @@ private:
         scene.objects.push_back(std::move(castleTowerTopLeftFront));
         scene.objects.push_back(std::move(castleTowerBaseRightFront));
         scene.objects.push_back(std::move(castleTowerTopRightFront));
-        //scene.objects.push_back(std::move(rock1));
-
         scene.objects.push_back(std::move(castleWallLeftBack));
 
+        // Clock
         scene.objects.push_back(std::move(clock));
         scene.objects.push_back(std::move(hourHand));
 
@@ -125,6 +158,7 @@ public:
         glfwSetCursorPos(window ,1920 / 2, 1080 / 2);
         scene.camera->firstMouse = true;
         onCursorPos(1920 / 2, 1080 / 2);
+        scene.lightDirection = {-1,200,-25};
 
     }
 
