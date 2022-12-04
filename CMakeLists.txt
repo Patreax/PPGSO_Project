@@ -231,7 +231,19 @@ add_executable(main
         src/project/c++/object.cpp
         src/project/c++/scene.cpp
         src/project/c++/camera.cpp
-        src/project/c++/castle.h src/project/c++/castle.cpp src/project/c++/castleGate.h src/project/c++/castleGate.cpp src/project/c++/castleWall.h src/project/c++/castleWall.cpp src/project/c++/castleTowerBase.h src/project/c++/castleTowerBase.cpp src/project/c++/castleTowerTop.h src/project/c++/castleTowerTop.cpp src/project/c++/clock.h src/project/c++/clock.cpp src/project/c++/hourHand.h src/project/c++/hourHand.cpp)
+        src/project/c++/castle.h src/project/c++/castle.cpp
+        src/project/c++/castleGate.h src/project/c++/castleGate.cpp
+        src/project/c++/castleWall.h src/project/c++/castleWall.cpp
+        src/project/c++/castleTowerBase.h src/project/c++/castleTowerBase.cpp
+        src/project/c++/castleTowerTop.h src/project/c++/castleTowerTop.cpp
+        src/project/c++/clock.h src/project/c++/clock.cpp
+        src/project/c++/hourHand.h src/project/c++/hourHand.cpp
+        src/project/c++/rock.cpp src/project/c++/rock.h
+        src/project/c++/ground.cpp src/project/c++/ground.h
+        src/project/c++/tree.cpp src/project/c++/tree.h
+        src/project/c++/water.cpp src/project/c++/water.h
+        src/project/c++/boat.cpp src/project/c++/boat.h
+        src/project/c++/riverGenerator.cpp src/project/c++/riverGenerator.h src/project/c++/log.cpp src/project/c++/log.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 add_custom_command(TARGET main POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

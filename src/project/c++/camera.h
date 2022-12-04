@@ -21,7 +21,7 @@ public:
   glm::vec3 direction{0,0,0};
   glm::vec3 cameraFront{0,0,-1};
 
-  float yaw = -90.0f;
+  float yaw = 90.0f;
   float pitch = 0.0f;
   float fov = 45.0f;
 
