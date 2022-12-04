@@ -17,6 +17,8 @@
 #include "random"
 #include "tree.h"
 #include "water.h"
+#include "boat.h"
+#include "riverGenerator.h"
 
 const unsigned int SIZE = 512;
 
@@ -26,6 +28,7 @@ const unsigned int HEIGHT = 1080;
 class SceneWindow : public ppgso::Window {
 private:
     Scene scene;
+    //float elapsed = 0;
 
     /*!
      * Reset and initialize the game scene
@@ -83,11 +86,23 @@ private:
 
             scene.objects.push_back(std::move(rock));
         }
+        for(int i = 1; i < 20; i++){
+            auto rock = std::make_unique<Rock>();
+            rock->position = {(double)rand()/(double)RAND_MAX * 200.0f - 100.0f,-13.5,(float)rand()/(double)RAND_MAX * 30.0f -80.0f};
+
+            scene.objects.push_back(std::move(rock));
+        }
 
         // Trees
         for(int i = 1; i < 20; i++){
             auto tree = std::make_unique<Tree>();
             tree->position = {-(double)rand()/(double)RAND_MAX * 44.0f -35.0f,-13.5,(float)rand()/(double)RAND_MAX * 120.0f -20.0f};
+
+            scene.objects.push_back(std::move(tree));
+        }
+        for(int i = 1; i < 20; i++){
+            auto tree = std::make_unique<Tree>();
+            tree->position = {(double)rand()/(double)RAND_MAX * 200.0f - 100.0f,-13.5,(float)rand()/(double)RAND_MAX * 30.0f -80.0f};
 
             scene.objects.push_back(std::move(tree));
         }
@@ -101,6 +116,10 @@ private:
 
         // Water
         addWater(-100, 100, -40, -25, -18);
+
+        // River Generator
+        auto riverGenerator = std::make_unique<RiverGenerator>();
+        scene.objects.push_back(std::move(riverGenerator));
 
         // towerBase
         auto castleTowerBaseLeftFront = std::make_unique<CastleTowerBase>();
@@ -236,8 +255,9 @@ public:
 
         // Compute time delta
         float dt = (float) glfwGetTime() - time;
-
+        //elapsed += dt;
         time = (float) glfwGetTime();
+        //std::cout << elapsed << "\n";
 
 //        // Set blue background
         glClearColor(.6f, .8f, 1, 0);
