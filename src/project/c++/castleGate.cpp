@@ -10,7 +10,7 @@ std::unique_ptr<ppgso::Texture> CastleGate::texture;
 
 CastleGate::CastleGate() {
     if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
-    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("stone.bmp"));
+    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("rock.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("castleGate.obj");
 }
 
