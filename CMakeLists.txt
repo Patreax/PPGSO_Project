@@ -71,6 +71,8 @@ set(PPGSO_SHADER_SRC
         shader/convolution_vert.glsl shader/convolution_frag.glsl
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
+        shader/light_vert.glsl shader/light_frag.glsl
+        shader/phong_vert.glsl shader/phong_frag.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
 
@@ -231,11 +233,11 @@ add_executable(main
         src/project/c++/object.cpp
         src/project/c++/scene.cpp
         src/project/c++/camera.cpp
-        src/project/c++/castle.h src/project/c++/castle.cpp
-        src/project/c++/castleGate.h src/project/c++/castleGate.cpp
-        src/project/c++/castleWall.h src/project/c++/castleWall.cpp
-        src/project/c++/castleTowerBase.h src/project/c++/castleTowerBase.cpp
-        src/project/c++/castleTowerTop.h src/project/c++/castleTowerTop.cpp
+        src/project/c++/castle/castle.h src/project/c++/castle/castle.cpp
+        src/project/c++/castle/castleGate.h src/project/c++/castle/castleGate.cpp
+        src/project/c++/castle/castleWall.h src/project/c++/castle/castleWall.cpp
+        src/project/c++/castle/castleTowerBase.h src/project/c++/castle/castleTowerBase.cpp
+        src/project/c++/castle/castleTowerTop.h src/project/c++/castle/castleTowerTop.cpp
         src/project/c++/clock.h src/project/c++/clock.cpp
         src/project/c++/hourHand.h src/project/c++/hourHand.cpp
         src/project/c++/rock.cpp src/project/c++/rock.h
@@ -243,7 +245,7 @@ add_executable(main
         src/project/c++/tree.cpp src/project/c++/tree.h
         src/project/c++/water.cpp src/project/c++/water.h
         src/project/c++/boat.cpp src/project/c++/boat.h
-        src/project/c++/riverGenerator.cpp src/project/c++/riverGenerator.h src/project/c++/log.cpp src/project/c++/log.h)
+        src/project/c++/riverGenerator.cpp src/project/c++/riverGenerator.h src/project/c++/log.cpp src/project/c++/log.h src/project/c++/spotLight.h src/project/c++/spotLight.cpp src/project/c++/light.h src/project/c++/light.cpp src/project/c++/lightManager.h src/project/c++/lightManager.cpp src/project/c++/objectMaterial.h src/project/c++/objectMaterial.cpp src/project/materials/glossyMaterial.h src/project/materials/glossyMaterial.cpp src/project/c++/pointLight.h src/project/c++/pointLight.cpp src/project/materials/mattMaterial.cpp src/project/materials/mattMaterial.h src/project/materials/palisadeMaterial.cpp src/project/materials/palisadeMaterial.h src/project/c++/torch.cpp src/project/c++/torch.h src/project/c++/fire.cpp src/project/c++/fire.h src/project/c++/campFire.cpp src/project/c++/campFire.h src/project/c++/lamp.cpp src/project/c++/lamp.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 add_custom_command(TARGET main POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

@@ -7,6 +7,8 @@
 
 #include "object.h"
 #include "camera.h"
+#include "spotLight.h"
+#include "lightManager.h"
 
 /*
  * Scene is an object that will aggregate all scene related data
@@ -45,6 +47,9 @@ class Scene {
 
     // Lights, in this case using only simple directional diffuse lighting
     glm::vec3 lightDirection{-1.0f, -1.0f, -1.0f};
+
+    std::list<std::unique_ptr<Light>> lights;
+    std::unique_ptr<LightManager> lightManager;
 
     // Store cursor state
     struct {

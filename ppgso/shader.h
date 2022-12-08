@@ -108,6 +108,12 @@ namespace ppgso {
      */
     void setUniform(const std::string &name, glm::mat3 matrix) const;
 
+    void setUniform(const std::string &name, glm::vec3 vectorArray[], int size) const;
+
+    void setUniform(const std::string &name, glm::vec4 vectorArray[], int size) const;
+
+    void setUniform(const std::string &name, int intArray[], int size) const;
+
   private:
     GLuint program;
   };

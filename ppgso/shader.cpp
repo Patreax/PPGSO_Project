@@ -141,3 +141,21 @@ void ppgso::Shader::setUniform(const std::string &name, glm::vec4 vector) const 
   auto uniform = getUniformLocation(name.c_str());
   glUniform4fv(uniform, 1, value_ptr(vector));
 }
+
+void ppgso::Shader::setUniform(const std::string &name, glm::vec3 vectorArray[], int size) const {
+    use();
+    auto uniform = getUniformLocation(name.c_str());
+    glUniform3fv(uniform, size, reinterpret_cast<GLfloat *>(vectorArray));
+}
+
+void ppgso::Shader::setUniform(const std::string &name, glm::vec4 vectorArray[], int size) const {
+    use();
+    auto uniform = getUniformLocation(name.c_str());
+    glUniform4fv(uniform, size, reinterpret_cast<const GLfloat *>(vectorArray));
+}
+
+void ppgso::Shader::setUniform(const std::string &name, int intArray[], int size) const {
+    use();
+    auto uniform = getUniformLocation(name.c_str());
+    glUniform1iv(uniform, size, reinterpret_cast<const GLint *>(intArray));
+}
