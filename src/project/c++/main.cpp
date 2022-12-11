@@ -23,6 +23,8 @@
 #include "lamp.h"
 #include "cannon.h"
 #include "ball.h"
+#include "bridgeBase.h"
+#include "bridge.h"
 
 const unsigned int SIZE = 512;
 
@@ -125,6 +127,17 @@ private:
             cannon->rotation.z = rad(90);
             scene.objects.push_back(std::move(cannon));
         }
+
+        // Bridge base
+        auto bridgeBase = std::make_unique<BridgeBase>();
+        bridgeBase->position = glm::vec3 {-2, -14, -32.5};
+        scene.objects.push_back(std::move(bridgeBase));
+
+        // Bridge
+        auto bridge = std::make_unique<Bridge>();
+        bridge->position = glm::vec3 {-2, -13.5, -26.5};
+        scene.objects.push_back(std::move(bridge));
+
 
         // Clock
         auto clock = std::make_unique<Clock>();

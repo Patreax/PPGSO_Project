@@ -21,11 +21,11 @@ bool Ball::update(Scene &scene, float dt) {
     generateModelMatrix();
     position += direction * glm::vec3 {speed * dt, speed * dt, speed * dt};
     position += glm::vec3 {0, dt * -gravity, 0};
-    // speed -= .0001;
+    speed -= 5.0f * dt;
     if (speed < 0)
         speed = 0;
     // position.y -= dt * gravity;
-    gravity += .5f;
+    gravity += 10.0f * dt;
     if (position.y < -20) {
         return false;
     }
