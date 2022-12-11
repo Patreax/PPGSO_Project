@@ -13,6 +13,7 @@
 RiverGenerator::RiverGenerator() {
     boatsGenerated = 0;
     logsGenerated = 0;
+    elapsed = 0;
 }
 
 void RiverGenerator::generateBoat(Scene &scene) {

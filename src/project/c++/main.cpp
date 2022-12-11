@@ -21,6 +21,8 @@
 #include "campFire.h"
 #include "fire.h"
 #include "lamp.h"
+#include "cannon.h"
+#include "ball.h"
 
 const unsigned int SIZE = 512;
 
@@ -114,6 +116,15 @@ private:
 
         // Build Castle
         Castle::buildCastle(scene);
+
+        // cannon
+        for (int i = 0; i < 30; i += 10){
+            auto cannon = std::make_unique<Cannon>(i/10);
+            cannon->position = glm::vec3 {55 + i, -13.5, 80};
+            cannon->scale = glm::vec3 {2, 2, 2};
+            cannon->rotation.z = rad(90);
+            scene.objects.push_back(std::move(cannon));
+        }
 
         // Clock
         auto clock = std::make_unique<Clock>();
