@@ -25,6 +25,10 @@
 #include "lamp.h"
 #include "shaders/postprocessing_vert_glsl.h"
 #include "shaders/postprocessing_frag_glsl.h"
+#include "cannon.h"
+#include "ball.h"
+#include "bridgeBase.h"
+#include "bridge.h"
 
 const unsigned int SIZE = 512;
 
@@ -118,6 +122,26 @@ private:
 
         // Build Castle
         Castle::buildCastle(scene);
+
+        // cannon
+        for (int i = 0; i < 30; i += 10){
+            auto cannon = std::make_unique<Cannon>(i/10);
+            cannon->position = glm::vec3 {55 + i, -13.5, 80};
+            cannon->scale = glm::vec3 {2, 2, 2};
+            cannon->rotation.z = rad(90);
+            scene.objects.push_back(std::move(cannon));
+        }
+
+        // Bridge base
+        auto bridgeBase = std::make_unique<BridgeBase>();
+        bridgeBase->position = glm::vec3 {-2, -14, -32.5};
+        scene.objects.push_back(std::move(bridgeBase));
+
+        // Bridge
+        auto bridge = std::make_unique<Bridge>();
+        bridge->position = glm::vec3 {-2, -13.5, -26.5};
+        scene.objects.push_back(std::move(bridge));
+
 
         // Clock
         auto clock = std::make_unique<Clock>();

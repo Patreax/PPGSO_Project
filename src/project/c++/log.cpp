@@ -22,11 +22,11 @@ Log::Log() {
     scale = glm::vec3 {s * .2f, s * .2f, s * .2f} + glm::vec3 {.5f,.5f,.5f};
     position.x += offset;
     position.z += offset;
-    speed = .1f;
+    speed = 5.0f;
 }
 
 bool Log::update(Scene &scene, float dt) {
-    position.x = position.x + speed;
+    position.x = position.x + speed * dt;
     generateModelMatrix();
     if(position.x > 100)
         return false;

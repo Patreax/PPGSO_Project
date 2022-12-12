@@ -24,13 +24,13 @@ Boat::Boat() {
     position.x += 1.5 * offset;
     position.z += offset;
     centerZ = position.z;
-    speed = .1f;
+    speed = 5.0f;
 
 }
 
 bool Boat::update(Scene &scene, float dt) {
     elapsed += dt;
-    position.x = position.x + speed;
+    position.x = position.x + speed * dt;
     position.z = centerZ + sin(elapsed + offset);
     generateModelMatrix();
     if(position.x > 100)
