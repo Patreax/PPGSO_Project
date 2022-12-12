@@ -9,3 +9,9 @@ void Object::generateModelMatrix() {
                   * glm::orientate4(rotation)
                   * glm::scale(glm::mat4(1.0f), scale);
 }
+
+void Object::renderShadows(Scene &scene, std::shared_ptr<ppgso::Shader> shader) {
+    shader->use();
+    shader->setUniform("model", this->modelMatrix);
+}
+

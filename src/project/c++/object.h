@@ -23,6 +23,9 @@ public:
 
     virtual void render(Scene &scene) = 0;
 
+    void renderShadows(Scene &scene, std::shared_ptr<ppgso::Shader> shader);
+
+
     // Object properties
     glm::vec3 position{0, 0, 0};
     glm::vec3 rotation{0, 0, 0};

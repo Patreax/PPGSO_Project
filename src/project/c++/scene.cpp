@@ -6,12 +6,11 @@ void Scene::update(float time) {
     lightManager->update(*this);
 
     auto lightIterator = std::begin(lights);
-    while (lightIterator != std::end(lights)){
+    while (lightIterator != std::end(lights)) {
         auto obj = lightIterator->get();
         if (!obj->update(*this, time)) {
             lightIterator = lights.erase(lightIterator);
-        }
-        else {
+        } else {
             ++lightIterator;
         }
     }
@@ -32,12 +31,47 @@ void Scene::update(float time) {
 }
 
 void Scene::render() {
+
+//    glEnable(GL_DEPTH_TEST);
+//    glViewport(0, 0, shadowMapWidth, shadowMapHeight);
+//    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+//    glClear(GL_DEPTH_BUFFER_BIT);
+//
+//    shadowMapShader->use();
+//    shadowMapShader->setUniform("lightProjection", lightProjection);
+//
+//    for (auto &obj : objects)
+//        obj->render(*this);
+//
+//
+//
+//    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glViewport(0, 0, sceneWidth, sceneHeight);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+
+    // Set blue background
+    glClearColor(.6f, .8f, 1, 0);
+    // Clear depth and color buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
     // Simply render all objects
     for (auto &obj: objects)
         obj->render(*this);
 
-    for (auto &obj : lights)
+    for (auto &obj: lights)
         obj->render(*this);
+
+
+    // Apply post-processing
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    postProcessingShader->use();
+    glBindVertexArray(rectVao);
+    glDisable(GL_DEPTH_TEST);
+    glBindTexture(GL_TEXTURE_2D, postProcessingTexture);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 std::vector<Object *> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {

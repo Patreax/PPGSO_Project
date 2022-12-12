@@ -51,6 +51,26 @@ class Scene {
     std::list<std::unique_ptr<Light>> lights;
     std::unique_ptr<LightManager> lightManager;
 
+    std::shared_ptr<ppgso::Shader> shadowMapShader;
+    std::unique_ptr<ppgso::Shader> postProcessingShader;
+
+    int sceneWidth = 1920;
+    int sceneHeight = 1080;
+
+    int shadowMapWidth = 1024;
+    int shadowMapHeight = 1024;
+
+    glm::mat4 lightProjection;
+
+    unsigned int shadowMapFBO;
+    unsigned int shadowMap;
+
+    unsigned int postProcessingFBO;
+    unsigned int postProcessingTexture;
+    unsigned int RBO;
+    unsigned int rectVao;
+
+
     // Store cursor state
     struct {
       double x, y;

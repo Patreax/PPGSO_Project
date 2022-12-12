@@ -3,6 +3,9 @@
 
 #include <ppgso/ppgso.h>
 
+#include <shaders/shadowmap_vert_glsl.h>
+#include <shaders/shadowmap_frag_glsl.h>
+
 #include "camera.h"
 #include "scene.h"
 #include "src/project/c++/castle/castle.h"
@@ -10,7 +13,6 @@
 #include "hourHand.h"
 #include "rock.h"
 #include "ground.h"
-#include "random"
 #include "tree.h"
 #include "water.h"
 #include "boat.h"
@@ -21,6 +23,8 @@
 #include "campFire.h"
 #include "fire.h"
 #include "lamp.h"
+#include "shaders/postprocessing_vert_glsl.h"
+#include "shaders/postprocessing_frag_glsl.h"
 
 const unsigned int SIZE = 512;
 
@@ -190,6 +194,101 @@ private:
         scene.lights.push_back(std::move(torchFrontRightLight));
 
         scene.lightManager = std::move(lightManager);
+
+
+        // Shadow Maps
+
+        unsigned int shadowMapFBO;
+        glGenFramebuffers(1, &shadowMapFBO);
+
+        unsigned int shadowMap;
+        glGenTextures(1, &shadowMap);
+        glBindTexture(GL_TEXTURE_2D, shadowMap);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, scene.shadowMapWidth, scene.shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+        float clampColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, clampColor);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glm::mat4 orthogonalProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 0.1f, 100.0f);
+        glm::mat4 lightView = glm::lookAt(glm::vec3{100,100,100}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
+        glm::mat4 lightProjection = orthogonalProjection * lightView;
+
+        scene.lightProjection = lightProjection;
+        scene.shadowMapShader = std::make_shared<ppgso::Shader>(shadowmap_vert_glsl, shadowmap_frag_glsl);
+        scene.shadowMapShader->use();
+        scene.shadowMapShader->setUniform("lightProjection", lightProjection);
+
+        scene.shadowMapFBO = shadowMapFBO;
+        scene.shadowMap = shadowMap;
+
+        // Post-processing
+        float rectangleVertices[] =
+                {
+
+                        // Coords    // texCoords
+                        1.0f, -1.0f,  1.0f, 0.0f,
+                        1.0f,  1.0f,  1.0f, 1.0f,
+                        -1.0f,  1.0f,  0.0f, 1.0f,
+                        -1.0f, -1.0f,  0.0f, 0.0f,
+                        1.0f, -1.0f,  1.0f, 0.0f,
+                        -1.0f,  1.0f,  0.0f, 1.0f
+                };
+
+        unsigned int rectVAO, rectVBO;
+        glGenVertexArrays(1, &rectVAO);
+        glGenBuffers(1, &rectVBO);
+        glBindVertexArray(rectVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, rectVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(rectangleVertices), &rectangleVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        // Post-processing FBO
+        unsigned int postProcessingFBO;
+        glGenFramebuffers(1, &postProcessingFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+        // Post-processing texture
+        unsigned int postProcessingTexture;
+        glGenTextures(1, &postProcessingTexture);
+        glBindTexture(GL_TEXTURE_2D, postProcessingTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, scene.sceneWidth, scene.sceneHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTexture, 0);
+        // Render buffer for texture
+        unsigned int RBO;
+        glGenRenderbuffers(1, &RBO);
+        glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, scene.sceneWidth, scene.sceneHeight);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+        auto fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "Framebuffer error: " << fboStatus << std::endl;
+
+        scene.postProcessingShader = std::make_unique<ppgso::Shader>(postprocessing_vert_glsl, postprocessing_frag_glsl);
+        scene.postProcessingShader->use();
+        scene.postProcessingShader->setUniform("ScreenTexture", 0);
+
+        // Attach to scene
+        scene.postProcessingFBO = postProcessingFBO;
+        scene.postProcessingTexture = postProcessingTexture;
+        scene.RBO = RBO;
+        scene.rectVao = rectVAO;
+
     }
 
 public:
@@ -283,14 +382,7 @@ public:
 
         // Compute time delta
         float dt = (float) glfwGetTime() - time;
-        //elapsed += dt;
         time = (float) glfwGetTime();
-        //std::cout << elapsed << "\n";
-
-//        // Set blue background
-        glClearColor(.6f, .8f, 1, 0);
-//         Clear depth and color buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update and render all objects
         scene.update(dt);
