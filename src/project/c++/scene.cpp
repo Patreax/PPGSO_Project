@@ -32,6 +32,7 @@ void Scene::update(float time) {
 
 void Scene::render() {
 
+    // Code for shadow maps
 //    glEnable(GL_DEPTH_TEST);
 //    glViewport(0, 0, shadowMapWidth, shadowMapHeight);
 //    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
