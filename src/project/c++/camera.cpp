@@ -18,6 +18,7 @@ void Camera::update(Scene &scene, float dt) {
 
     //viewMatrix = glm::lookAt(position, position + cameraFront, up);
     //move(scene, dt, scene.cursor.x, scene.cursor.y);
+
     // move(scene, dt, lastX, lastY);
 
     static int stage = 0;
@@ -27,8 +28,16 @@ void Camera::update(Scene &scene, float dt) {
             case 1:
                 anim.set({
 //                                 {40,{0,-5,-80},anim.back},
-                                 {2,{-2,-6,-80},anim.back},
-                                 {2,{-2,-6,-80},anim.back},
+                                 {20,{-2,-6,-70},anim.back},
+                                 {2,{-2,-6,-70},anim.back},
+                                 {2,{-2,-6,-20},anim.back}
+                         });
+                current_anim = &anim;
+
+                break;
+            case 2:
+                anim.set({
+//                                 {40,{0,-5,-80},anim.back},
                                  {2,{-2,-6,-20},anim.back},
                                  {2,{-2,-6,-17},anim.back},
                                  {2,{-2,-6,20},anim.back},
@@ -43,8 +52,10 @@ void Camera::update(Scene &scene, float dt) {
                                  {2,{-6,-8,35},anim.right},
                          });
                 current_anim = &anim;
+                scene.current = &scene.inside;
+
                 break;
-            case 2:
+            case 3:
                 curve.set(
                         5,
                         {-2,-8,35},
@@ -58,9 +69,11 @@ void Camera::update(Scene &scene, float dt) {
                         anim.right
                 );
                 current_anim = &curve;
+                scene.current = &scene.side;
                 break;
-            case 3:
+            case 4:
                 anim.set({
+                                 {2,{60,-8,35},anim.back},
                                  {2,{70,-8,35},anim.back},
                                  {2,{70,-8,35},anim.back},
                                  {2,{70,-8,35},anim.front},
