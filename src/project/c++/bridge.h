@@ -9,8 +9,8 @@ private:
     static std::unique_ptr<ppgso::Texture> texture;
     float elapsed = 0;
     int cycle = 0;
-    int animState = 0;
-    float angle = 0;
+    int animState = 2;
+    float angle = 90;
 
 public:
     Bridge();
