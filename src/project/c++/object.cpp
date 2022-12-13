@@ -85,8 +85,19 @@ bool Object::update(Scene &scene, float dt, KeyframeAnimation &anim) {
     return true;
 }
 
+bool Object::update(Scene &scene, float dt, glm::mat4 parent, KeyframeAnimation &anim) {
+    generateModelMatrix(parent);
+    modelMatrix = modelMatrix * anim.update(dt);
+    for (auto &child:children){
+        child->update(scene, dt, modelMatrix);
+    }
+    return true;
+}
+
 void Object::renderShadows(Scene &scene, std::shared_ptr<ppgso::Shader> shader) {
     shader->use();
     shader->setUniform("model", this->modelMatrix);
 }
+
+
 

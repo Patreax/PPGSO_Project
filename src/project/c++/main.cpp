@@ -52,7 +52,7 @@ private:
                 ground->scale = {2, 2, 2,};
                 ground->rotation = rotation;
                 ground->position = {i, y, j};
-                scene.objects.push_back(std::move(ground));
+                scene.outside.push_back(std::move(ground));
             }
         }
     }
@@ -64,14 +64,14 @@ private:
                 water->scale = {2, 2, 2,};
                 water->rotation = glm::vec3{0, 0, 0};
                 water->position = {i, y, j};
-                scene.objects.push_front(std::move(water));
+                scene.outside.push_front(std::move(water));
             }
         }
     }
 
     void initScene() {
-        scene.objects.clear();
 
+        scene.current = &scene.outside;
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, 1.0f, 0.1f, 200.0f);
         camera->position.z = -55.0f;
@@ -82,14 +82,14 @@ private:
             rock->position = {-(double) rand() / (double) RAND_MAX * 44.0f - 35.0f, -13.5,
                               (float) rand() / (double) RAND_MAX * 120.0f - 20.0f};
 
-            scene.objects.push_back(std::move(rock));
+            scene.outside.push_back(std::move(rock));
         }
         for (int i = 1; i < 20; i++) {
             auto rock = std::make_unique<Rock>();
             rock->position = {(double) rand() / (double) RAND_MAX * 200.0f - 100.0f, -13.5,
                               (float) rand() / (double) RAND_MAX * 30.0f - 80.0f};
 
-            scene.objects.push_back(std::move(rock));
+            scene.outside.push_back(std::move(rock));
         }
 
         // Trees
@@ -98,14 +98,14 @@ private:
             tree->position = {-(double) rand() / (double) RAND_MAX * 44.0f - 35.0f, -13.5,
                               (float) rand() / (double) RAND_MAX * 120.0f - 20.0f};
 
-            scene.objects.push_back(std::move(tree));
+            scene.outside.push_back(std::move(tree));
         }
         for (int i = 1; i < 20; i++) {
             auto tree = std::make_unique<Tree>();
             tree->position = {(double) rand() / (double) RAND_MAX * 200.0f - 100.0f, -13.5,
                               (float) rand() / (double) RAND_MAX * 30.0f - 80.0f};
 
-            scene.objects.push_back(std::move(tree));
+            scene.outside.push_back(std::move(tree));
         }
 
         //Ground
@@ -120,7 +120,7 @@ private:
 
         // River Generator
         auto riverGenerator = std::make_unique<RiverGenerator>();
-        scene.objects.push_back(std::move(riverGenerator));
+        scene.outside.push_back(std::move(riverGenerator));
 
         // Build Castle
         Castle::buildCastle(scene);
@@ -131,18 +131,18 @@ private:
             cannon->position = glm::vec3 {55 + i, -13.5, 80};
             cannon->scale = glm::vec3 {2, 2, 2};
             cannon->rotation.z = rad(90);
-            scene.objects.push_back(std::move(cannon));
+            scene.side.push_back(std::move(cannon));
         }
 
         // Bridge base
         auto bridgeBase = std::make_unique<BridgeBase>();
         bridgeBase->position = glm::vec3 {-2, -14, -32.5};
-        scene.objects.push_back(std::move(bridgeBase));
+        scene.outside.push_back(std::move(bridgeBase));
 
         // Bridge
         auto bridge = std::make_unique<Bridge>();
         bridge->position = glm::vec3 {-2, -13.5, -26.5};
-        scene.objects.push_back(std::move(bridge));
+        scene.outside.push_back(std::move(bridge));
 
 
         // Clock
@@ -181,7 +181,7 @@ private:
         auto torchLight = std::make_unique<PointLight>();
         torchLight->position = torch->position + glm::vec3{1.5f, 2.2f, 0.0f};
         torchLight->lightColor = glm::vec4{1.0f, 0.0f, 0.0f, 1.0f};
-        scene.objects.push_back(std::move(torch));
+        scene.outside.push_back(std::move(torch));
 
         auto torchFrontLeft = std::make_unique<Torch>();
         torchFrontLeft->position = glm::vec3{2, 0, -1};
@@ -190,7 +190,7 @@ private:
         auto torchFrontLeftLight = std::make_unique<PointLight>();
         torchFrontLeftLight->position = torchFrontLeft->position + glm::vec3{-1.8f, 2.2f, 0.0f};
         torchFrontLeftLight->lightColor = glm::vec4{0.0f, 1.0f, 1.0f, 1.0f};
-        scene.objects.push_back(std::move(torchFrontLeft));
+        scene.outside.push_back(std::move(torchFrontLeft));
 
         auto torchFrontRight = std::make_unique<Torch>();
         torchFrontRight->position = glm::vec3{-7, 0, -1};
@@ -199,15 +199,15 @@ private:
         auto torchFrontRightLight = std::make_unique<PointLight>();
         torchFrontRightLight->position = torchFrontRight->position + glm::vec3{2.0f, 2.2f, 0.0f};
         torchFrontRightLight->lightColor = glm::vec4{0.0f, 1.0f, 1.0f, 1.0f};
-        scene.objects.push_back(std::move(torchFrontRight));
+        scene.outside.push_back(std::move(torchFrontRight));
 
         // Light Manager
         auto lightManager = std::make_unique<LightManager>();
 
         scene.camera = std::move(camera);
 
-        scene.objects.push_back(std::move(campFire));
-        scene.objects.push_back(std::move(lamp));
+        scene.inside.push_back(std::move(campFire));
+        scene.inside.push_back(std::move(lamp));
 
         // Clock
 //        scene.objects.push_back(std::move(clock));
@@ -226,13 +226,13 @@ private:
         chest->position = {0,-13.5,60};
         chest->scale = {0.05,0.05,0.05};
         chest->rotation = {0, 0, ppgso::PI};
-        scene.objects.push_back(std::move(chest));
+        scene.inside.push_back(std::move(chest));
 
         // Knight
         auto knight = std::make_unique<Knight>();
         knight->position = {25,-13.5,40};
         knight->rotation = {0,0,ppgso::PI};
-        scene.objects.push_back(std::move(knight));
+        scene.inside.push_back(std::move(knight));
         // Shadow Maps
 
         unsigned int shadowMapFBO;
@@ -325,6 +325,15 @@ private:
         scene.postProcessingTexture = postProcessingTexture;
         scene.RBO = RBO;
         scene.rectVao = rectVAO;
+
+        scene.current = &scene.inside;
+        scene.update(0);
+        scene.current = &scene.side;
+        scene.update(0);
+        scene.current = &scene.outside;
+        scene.update(0);
+
+        scene.current = &scene.outside;
 
     }
 

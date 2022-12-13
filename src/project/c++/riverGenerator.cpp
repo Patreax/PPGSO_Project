@@ -18,13 +18,13 @@ RiverGenerator::RiverGenerator() {
 
 void RiverGenerator::generateBoat(Scene &scene) {
     auto obj = std::make_unique<Boat>();
-    scene.objects.push_back(std::move(obj));
+    scene.outside.push_back(std::move(obj));
     boatsGenerated++;
 }
 
 void RiverGenerator::generateLog(Scene &scene) {
     auto obj = std::make_unique<Log>();
-    scene.objects.push_back(std::move(obj));
+    scene.outside.push_back(std::move(obj));
     logsGenerated++;
 }
 

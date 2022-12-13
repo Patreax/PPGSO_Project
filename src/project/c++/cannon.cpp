@@ -20,7 +20,7 @@ Cannon::Cannon(int offset) {
 void Cannon::generateBall(Scene &scene) {
     auto obj = std::make_unique<Ball>();
     obj->position = position + glm::vec3 {0, 4, -5};
-    scene.objects.push_back(std::move(obj));
+    scene.side.push_back(std::move(obj));
     ballsGenerated++;
 }
 

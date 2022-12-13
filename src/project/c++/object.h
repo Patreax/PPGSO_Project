@@ -30,6 +30,8 @@ public:
     virtual bool update(Scene &scene, float dt);
     virtual bool update(Scene &scene, float dt, glm::mat4 parent);
     virtual bool update(Scene &scene, float dt, KeyframeAnimation &anim);
+    virtual bool update(Scene &scene, float dt, glm::mat4 parent, KeyframeAnimation &anim);
+
 
     virtual void render(Scene &scene);
 
