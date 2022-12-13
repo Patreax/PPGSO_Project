@@ -5,6 +5,7 @@
 #include <glm/gtx/compatibility.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include "curve.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 void Curve::set(float time, glm::vec3 p_0, glm::vec3 p_1, glm::vec3 p_2, glm::vec3 p_3, glm::vec3 direction) {
     max_time = time;

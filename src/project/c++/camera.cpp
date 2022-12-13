@@ -26,22 +26,48 @@ void Camera::update(Scene &scene, float dt) {
         switch (stage) {
             case 1:
                 anim.set({
-                                 {5,{0,-5,-80},anim.back},
-                                 {5,{0,-5,-40},anim.back}
+//                                 {40,{0,-5,-80},anim.back},
+                                 {2,{-2,-6,-80},anim.back},
+                                 {2,{-2,-6,-80},anim.back},
+                                 {2,{-2,-6,-20},anim.back},
+                                 {2,{-2,-6,-17},anim.back},
+                                 {2,{-2,-6,20},anim.back},
+                                 {2,{-2,-6,20},anim.back},
+                                 {2,{-15,-8,22},anim.left},
+                                 {2,{-15,-8,28},anim.left},
+                                 {2,{-2,-8,45},anim.left},
+                                 {2,{-2,-8,45},anim.left},
+                                 {2,{-2,-3,35},anim.back},
+                                 {4,{4,-3,35},anim.back},
+                                 {2,{-6,-8,35},anim.right},
+                                 {2,{-6,-8,35},anim.right},
                          });
                 current_anim = &anim;
                 break;
             case 2:
                 curve.set(
                         5,
-                        {-10, 0, -10},
-                        {-5, 10, -10},
-                        {5, 10, -10},
-                        {10, 0, -10},
-                        anim.back
+                        {-2,-8,35},
+                        {30, 10, 35},
+                        {50, 10, 35},
+                        {60, -8, 35},
+//                        {-10, 0, -10},
+//                        {-5, 10, -10},
+//                        {5, 10, -10},
+//                        {10, 0, -10},
+                        anim.right
                 );
                 current_anim = &curve;
-
+                break;
+            case 3:
+                anim.set({
+                                 {2,{70,-8,35},anim.back},
+                                 {2,{70,-8,35},anim.back},
+                                 {2,{70,-8,35},anim.front},
+                                 {2,{70,-8,35},anim.front},
+                        });
+                current_anim = &anim;
+                break;
         }
     }
 
