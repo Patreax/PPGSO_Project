@@ -61,19 +61,19 @@ void Castle::buildCastle(Scene &scene) {
     auto castleTowerTopRightBack = std::make_unique<CastleTowerTop>();
     castleTowerTopRightBack->position = castleTowerBaseRightBack->position + glm::vec3{0, 13, 0};
 
-    scene.objects.push_back(std::move(castleGate));
-    scene.objects.push_back(std::move(castleWallLeftFront));
-    scene.objects.push_back(std::move(castleWallRightFront));
-    scene.objects.push_back(std::move(castleTowerBaseLeftFront));
-    scene.objects.push_back(std::move(castleTowerTopLeftFront));
-    scene.objects.push_back(std::move(castleTowerBaseRightFront));
-    scene.objects.push_back(std::move(castleTowerTopRightFront));
-    scene.objects.push_back(std::move(castleWallLeftBack));
-    scene.objects.push_back(std::move(castleWallRightBack));
-    scene.objects.push_back(std::move(castleTowerBaseLeftBack));
-    scene.objects.push_back(std::move(castleTowerBaseRightBack));
-    scene.objects.push_back(std::move(castleTowerTopLeftBack));
-    scene.objects.push_back(std::move(castleTowerTopRightBack));
-    scene.objects.push_back(std::move(castleWallBack));
+    scene.outside.push_back(std::move(castleGate));
+    scene.outside.push_back(std::move(castleWallLeftFront));
+    scene.outside.push_back(std::move(castleWallRightFront));
+    scene.outside.push_back(std::move(castleTowerBaseLeftFront));
+    scene.outside.push_back(std::move(castleTowerTopLeftFront));
+    scene.outside.push_back(std::move(castleTowerBaseRightFront));
+    scene.outside.push_back(std::move(castleTowerTopRightFront));
+    scene.outside.push_back(std::move(castleWallLeftBack));
+    scene.outside.push_back(std::move(castleWallRightBack));
+    scene.outside.push_back(std::move(castleTowerBaseLeftBack));
+    scene.outside.push_back(std::move(castleTowerBaseRightBack));
+    scene.outside.push_back(std::move(castleTowerTopLeftBack));
+    scene.outside.push_back(std::move(castleTowerTopRightBack));
+    scene.outside.push_back(std::move(castleWallBack));
 
 }

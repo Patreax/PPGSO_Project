@@ -18,13 +18,13 @@ void Scene::update(float time) {
 
 
     // Use iterator to update all objects so we can remove while iterating
-    auto i = std::begin(objects);
+    auto i = std::begin(*current);
 
-    while (i != std::end(objects)) {
+    while (i != std::end(*current)) {
         // Update and remove from list if needed
         auto obj = i->get();
         if (!obj->update(*this, time))
-            i = objects.erase(i); // NOTE: no need to call destructors as we store shared pointers in the scene
+            i = current->erase(i); // NOTE: no need to call destructors as we store shared pointers in the scene
         else
             ++i;
     }
@@ -59,7 +59,11 @@ void Scene::render() {
     glEnable(GL_DEPTH_TEST);
 
     // Simply render all objects
-    for (auto &obj: objects)
+    for (auto &obj: outside)
+        obj->render(*this);
+    for (auto &obj: inside)
+        obj->render(*this);
+    for (auto &obj: side)
         obj->render(*this);
 
     for (auto &obj: lights)
@@ -77,7 +81,7 @@ void Scene::render() {
 
 std::vector<Object *> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {
     std::vector<Object *> intersected = {};
-    for (auto &object: objects) {
+    for (auto &object: *current) {
         // Collision with sphere of size object->scale.x
         auto oc = position - object->position;
         auto radius = object->scale.x;
