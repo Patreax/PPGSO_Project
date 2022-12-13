@@ -29,6 +29,8 @@
 #include "ball.h"
 #include "bridgeBase.h"
 #include "bridge.h"
+#include "chest.h"
+#include "knight.h"
 
 const unsigned int SIZE = 512;
 
@@ -219,7 +221,18 @@ private:
 
         scene.lightManager = std::move(lightManager);
 
+        // Chest
+        auto chest = std::make_unique<Chest>();
+        chest->position = {0,-13.5,60};
+        chest->scale = {0.05,0.05,0.05};
+        chest->rotation = {0, 0, ppgso::PI};
+        scene.objects.push_back(std::move(chest));
 
+        // Knight
+        auto knight = std::make_unique<Knight>();
+        knight->position = {25,-13.5,40};
+        knight->rotation = {0,0,ppgso::PI};
+        scene.objects.push_back(std::move(knight));
         // Shadow Maps
 
         unsigned int shadowMapFBO;

@@ -130,7 +130,7 @@ target_link_libraries(raw4_raster ppgso)
 install(TARGETS raw4_raster DESTINATION .)
 
 # gl1_gradient
-add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp)
+add_executable(gl1_gradient src/gl1_gradient/gl1_gradient.cpp src/project/c++/spider.h)
 target_link_libraries(gl1_gradient ppgso shaders)
 install(TARGETS gl1_gradient DESTINATION .)
 
@@ -247,7 +247,7 @@ add_executable(main
         src/project/c++/tree.cpp src/project/c++/tree.h
         src/project/c++/water.cpp src/project/c++/water.h
         src/project/c++/boat.cpp src/project/c++/boat.h
-        src/project/c++/riverGenerator.cpp src/project/c++/riverGenerator.h src/project/c++/log.cpp src/project/c++/log.h src/project/c++/spotLight.h src/project/c++/spotLight.cpp src/project/c++/light.h src/project/c++/light.cpp src/project/c++/lightManager.h src/project/c++/lightManager.cpp src/project/c++/objectMaterial.h src/project/c++/objectMaterial.cpp src/project/materials/glossyMaterial.h src/project/materials/glossyMaterial.cpp src/project/c++/pointLight.h src/project/c++/pointLight.cpp src/project/materials/mattMaterial.cpp src/project/materials/mattMaterial.h src/project/materials/palisadeMaterial.cpp src/project/materials/palisadeMaterial.h src/project/c++/torch.cpp src/project/c++/torch.h src/project/c++/fire.cpp src/project/c++/fire.h src/project/c++/campFire.cpp src/project/c++/campFire.h src/project/c++/lamp.cpp src/project/c++/lamp.h src/project/c++/cannon.cpp src/project/c++/cannon.h src/project/c++/ball.cpp src/project/c++/ball.h src/project/c++/bridgeBase.cpp src/project/c++/bridgeBase.h src/project/c++/bridge.cpp src/project/c++/bridge.h)
+        src/project/c++/riverGenerator.cpp src/project/c++/riverGenerator.h src/project/c++/log.cpp src/project/c++/log.h src/project/c++/spotLight.h src/project/c++/spotLight.cpp src/project/c++/light.h src/project/c++/light.cpp src/project/c++/lightManager.h src/project/c++/lightManager.cpp src/project/c++/objectMaterial.h src/project/c++/objectMaterial.cpp src/project/materials/glossyMaterial.h src/project/materials/glossyMaterial.cpp src/project/c++/pointLight.h src/project/c++/pointLight.cpp src/project/materials/mattMaterial.cpp src/project/materials/mattMaterial.h src/project/materials/palisadeMaterial.cpp src/project/materials/palisadeMaterial.h src/project/c++/torch.cpp src/project/c++/torch.h src/project/c++/fire.cpp src/project/c++/fire.h src/project/c++/campFire.cpp src/project/c++/campFire.h src/project/c++/lamp.cpp src/project/c++/lamp.h src/project/c++/cannon.cpp src/project/c++/cannon.h src/project/c++/ball.cpp src/project/c++/ball.h src/project/c++/bridgeBase.cpp src/project/c++/bridgeBase.h src/project/c++/bridge.cpp src/project/c++/bridge.h src/project/c++/spider.h src/project/c++/spider.cpp src/project/c++/chestLid.h src/project/c++/chestLid.cpp src/project/c++/chest.h src/project/c++/chest.cpp src/project/c++/keyframeAnimation.cpp src/project/c++/keyframeAnimation.h src/project/c++/curve.h src/project/c++/curve.cpp src/project/c++/animation.h src/project/c++/knight.cpp src/project/c++/knight.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 add_custom_command(TARGET main POST_BUILD COMMAND  ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_CURRENT_BINARY_DIR})

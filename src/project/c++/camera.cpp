@@ -17,11 +17,37 @@ void Camera::update(Scene &scene, float dt) {
 //    viewMatrix = lookAt(position, direction, up);
 
     viewMatrix = glm::lookAt(position, position + cameraFront, up);
-
-
-
     move(scene, dt, scene.cursor.x, scene.cursor.y);
-//    move(scene, dt, lastX, lastY);
+    // move(scene, dt, lastX, lastY);
+
+    /*
+    static int stage = 0;
+    if(current_anim->is_done() || stage == 0){
+        stage++;
+        switch (stage) {
+            case 1:
+                anim.set({
+                                 {5,{-10,0,-50},anim.back},
+                                 {5,{-10,0,-50},anim.front}
+                         });
+                current_anim = &anim;
+                break;
+            case 2:
+                curve.set(
+                        5,
+                        {-10, 0, -10},
+                        {-5, 10, -10},
+                        {5, 10, -10},
+                        {10, 0, -10},
+                        anim.back
+                );
+                current_anim = &curve;
+
+        }
+    }
+
+    viewMatrix = glm::inverse(current_anim->update(dt));
+     */
 }
 
 glm::vec3 Camera::cast(double u, double v) {

@@ -3,6 +3,9 @@
 
 #include <glm/glm.hpp>
 #include <ppgso/ppgso.h>
+#include "keyframeAnimation.h"
+#include "animation.h"
+#include "curve.h"
 
 class Scene;
 
@@ -58,5 +61,9 @@ public:
 
   void move(Scene &scene, float dt, float xpos, float ypos);
   void rotate(Scene &scene);
+
+    KeyframeAnimation anim;
+    Curve curve;
+    Animation *current_anim = &anim;
 };
 
