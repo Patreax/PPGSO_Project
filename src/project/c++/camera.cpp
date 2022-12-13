@@ -16,19 +16,18 @@ void Camera::update(Scene &scene, float dt) {
 //    viewMatrix = glm::rotate(glm::mat4{1.0f}, rotation.y, up);
 //    viewMatrix = lookAt(position, direction, up);
 
-    viewMatrix = glm::lookAt(position, position + cameraFront, up);
-    move(scene, dt, scene.cursor.x, scene.cursor.y);
+    //viewMatrix = glm::lookAt(position, position + cameraFront, up);
+    //move(scene, dt, scene.cursor.x, scene.cursor.y);
     // move(scene, dt, lastX, lastY);
 
-    /*
     static int stage = 0;
     if(current_anim->is_done() || stage == 0){
         stage++;
         switch (stage) {
             case 1:
                 anim.set({
-                                 {5,{-10,0,-50},anim.back},
-                                 {5,{-10,0,-50},anim.front}
+                                 {5,{0,-5,-80},anim.back},
+                                 {5,{0,-5,-40},anim.back}
                          });
                 current_anim = &anim;
                 break;
@@ -47,7 +46,6 @@ void Camera::update(Scene &scene, float dt) {
     }
 
     viewMatrix = glm::inverse(current_anim->update(dt));
-     */
 }
 
 glm::vec3 Camera::cast(double u, double v) {
